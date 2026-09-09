@@ -52,8 +52,11 @@ issues are recorded as data-quality findings and will be normalized explicitly
 without modifying the raw files.
 
 See [the data documentation](data/README.md), the committed
-[SHA-256 inventory](data/checksums.json), and the generated
-[data profile](reports/data-profile.json) for exact provenance and counts.
+[SHA-256 inventory](data/checksums.json), the written
+[profile interpretation](reports/data-profile.md), and the generated
+[data profile](reports/data-profile.json) for exact provenance and counts. The
+[data-quality audit](reports/data-quality-audit.md) documents types, non-finite
+values, exact duplicates, and the proposed cleaning policy.
 
 ## Experimental design
 
@@ -124,8 +127,12 @@ netguard-ai/
 │   ├── checksums.json
 │   └── raw/                 # local only; ignored by Git
 ├── reports/
-│   └── data-profile.json
+│   ├── data-profile.json
+│   ├── data-profile.md
+│   ├── data-quality-audit.json
+│   └── data-quality-audit.md
 └── scripts/
+    ├── audit_dataset.py
     ├── hash_dataset.py
     └── profile_dataset.py
 ```
@@ -162,7 +169,7 @@ Any checksum mismatch must be investigated before the affected file is used.
 - [x] Download and verify the official dataset distribution.
 - [x] Record archive and per-file SHA-256 hashes.
 - [x] Profile schemas, row counts, and labels.
-- [ ] Audit types, missing values, infinities, and duplicates.
+- [x] Audit types, missing values, infinities, and duplicates.
 - [ ] Audit features for leakage risk.
 - [ ] Freeze random and temporal partitions.
 - [ ] Build the preprocessing pipeline and learned baseline.
