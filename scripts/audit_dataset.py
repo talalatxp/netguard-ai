@@ -189,6 +189,30 @@ def audit_files(paths: list[Path], root: Path) -> dict[str, object]:
     for stats in column_stats:
         stats["inferred_type"] = infer_type(stats)
 
+    constant_numeric_columns = []
+
+    for stats in column_stats:
+        has_only_finite_values = (
+            stats["empty_count"] == 0
+            and stats["nan_count"] == 0
+            and stats["positive_infinity_count"] == 0
+            and stats["negative_infinity_count"] == 0
+        )
+
+        if (
+            stats["inferred_type"] == "numeric"
+            and stats["finite_count"] > 0
+            and stats["finite_min"] == stats["finite_max"]
+            and has_only_finite_values
+        ):
+            constant_numeric_columns.append(
+                {
+                    "index": stats["index"],
+                    "normalized_name": stats["normalized_name"],
+                    "constant_value": stats["finite_min"],
+                }
+            )
+
     normalized_names: Counter[str] = Counter(
         str(stats["normalized_name"]) for stats in column_stats
     )
@@ -224,6 +248,7 @@ def audit_files(paths: list[Path], root: Path) -> dict[str, object]:
         ],
         "columns": column_stats,
         "files": file_results,
+        "constant_numeric_columns": constant_numeric_columns,
     }
 
 

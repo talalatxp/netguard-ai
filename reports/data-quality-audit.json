@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-09-08T15:29:58.714030+00:00",
+  "generated_at_utc": "2026-09-10T14:25:06.287758+00:00",
   "method": {
     "numeric_parser": "Python float",
     "duplicate_definition": "identical raw CSV row bytes after removing the line ending",
@@ -1362,6 +1362,48 @@
       "malformed_row_count": 0,
       "within_file_duplicate_count": 81909,
       "cross_file_duplicate_count": 20029
+    }
+  ],
+  "constant_numeric_columns": [
+    {
+      "index": 31,
+      "normalized_name": "Bwd PSH Flags",
+      "constant_value": 0.0
+    },
+    {
+      "index": 33,
+      "normalized_name": "Bwd URG Flags",
+      "constant_value": 0.0
+    },
+    {
+      "index": 56,
+      "normalized_name": "Fwd Avg Bytes/Bulk",
+      "constant_value": 0.0
+    },
+    {
+      "index": 57,
+      "normalized_name": "Fwd Avg Packets/Bulk",
+      "constant_value": 0.0
+    },
+    {
+      "index": 58,
+      "normalized_name": "Fwd Avg Bulk Rate",
+      "constant_value": 0.0
+    },
+    {
+      "index": 59,
+      "normalized_name": "Bwd Avg Bytes/Bulk",
+      "constant_value": 0.0
+    },
+    {
+      "index": 60,
+      "normalized_name": "Bwd Avg Packets/Bulk",
+      "constant_value": 0.0
+    },
+    {
+      "index": 61,
+      "normalized_name": "Bwd Avg Bulk Rate",
+      "constant_value": 0.0
     }
   ]
 }
