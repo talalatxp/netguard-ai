@@ -69,13 +69,17 @@ values, exact duplicates, and the proposed cleaning policy.
 ### Evaluation A: random reference
 
 - Fixed random seed.
-- Stratified train, validation, and test partitions.
+- Group-aware train, validation, and test partitions by exact feature hash;
+  check class balance because mixed-label groups limit strict stratification.
 - Included as a reference comparable with common introductory approaches.
 - Not treated as sufficient evidence of temporal generalization.
 
 ### Evaluation B: temporal
 
 - Chronological `train -> validation -> test` ordering.
+- Primary metrics cover all later rows remaining after the agreed exact
+  full-row deduplication. Report metrics separately for feature hashes absent
+  from earlier partitions.
 - Later data is never used to fit transformations or models.
 - Exact day assignments will be frozen after exploratory analysis of volume,
   class balance, attack coverage, and rare labels.
@@ -176,6 +180,8 @@ one-based line numbers point to the original CSVs. The fingerprint excludes
 original feature-cell strings exactly, not numerically equivalent or similar
 flows. Different files are flagged, but this audit alone does not establish
 chronological order or whether a future split leaks data.
+The [leakage-audit interpretation](reports/feature-leakage-audit.md) records the
+evaluation policy for repeated vectors and conflicting labels.
 
 Any checksum mismatch must be investigated before the affected file is used.
 
@@ -186,8 +192,8 @@ Any checksum mismatch must be investigated before the affected file is used.
 - [x] Record archive and per-file SHA-256 hashes.
 - [x] Profile schemas, row counts, and labels.
 - [x] Audit types, missing values, infinities, and duplicates.
-- [ ] Audit features for leakage risk.
-- [ ] Freeze random and temporal partitions.
+- [x] Audit pre-split feature leakage risks and record evaluation safeguards.
+- [ ] Freeze random and temporal partitions and verify cross-partition overlap.
 - [ ] Build the preprocessing pipeline and learned baseline.
 - [ ] Compare Random Forest and gradient boosting.
 - [ ] Analyze errors, attack coverage, and feature importance.

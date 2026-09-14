@@ -32,6 +32,11 @@ five examples of each category.
 | Rows in conflicting-label groups | 7,020 |
 | Repeated groups spanning multiple files | 34,208 |
 
+Of the 698 conflicting-label groups, 564 combine `BENIGN` with `PortScan`,
+130 combine `BENIGN` with `DoS Hulk`, three combine `BENIGN` with `DDoS`,
+and one combines `BENIGN` with `DoS slowloris`. 664 conflicting groups span
+multiple files.
+
 These are **feature-vector groups**, not the raw-row duplicate count from the
 data-quality audit. Raw-row duplicates require an identical complete CSV row,
 including `Label`; this audit intentionally omits `Label` to expose cases where
@@ -49,3 +54,50 @@ establish chronological order or prove that a particular future split leaks.
 The next controls must define the partitions, verify that identical feature
 vectors do not cross them under the chosen policy, and check that preprocessing
 parameters are fitted only on training data.
+
+## Frozen evaluation policy for repeated vectors
+
+1. Apply the already agreed exact **full-row** deduplication before either
+   evaluation, retaining the earliest occurrence in explicit day order. This
+   preparation step is not implemented by this audit.
+2. Make the random reference group-aware by `feature_hash`: all remaining rows
+   with the same observable feature vector belong to one partition. Use a fixed
+   seed and check the resulting class balance; conflicting-label groups cannot
+   be perfectly stratified by a single label.
+3. Keep the temporal partitions in day order. Do not move a later row to an
+   earlier partition merely because its feature hash appeared before. The
+   primary temporal result uses **all later rows remaining after full-row
+   deduplication**, including repeated feature vectors.
+4. Separately report temporal results on novel vectors: validation hashes absent
+   from training, and test hashes absent from both training and validation.
+   Report the row and label counts for the full and novel subsets so the
+   comparison is interpretable.
+5. Preserve conflicting-label rows and report their counts and error rates;
+   do not silently relabel or delete them. Freeze model and threshold decisions
+   before evaluating the final test set.
+
+For the random reference, a nonzero shared-hash count between partitions is an
+error. For the temporal evaluation, shared hashes are measured and reported,
+not treated as an automatic failure. These decisions distinguish performance
+on later traffic from performance on feature patterns not observed in earlier
+partitions. The hash compares exact CSV strings only; transformed numeric
+equivalence and near-duplicate scenarios still require later checks.
+
+## Direct target and metadata leakage check
+
+The verified CSV schema has 78 numeric columns and one string `Label` column.
+It has no `Timestamp`, `Flow ID`, source-IP, or destination-IP column. Removing
+the redundant header-length copy and eight constant numeric columns leaves
+69 planned numeric model features before missing-value indicators are added.
+
+`Label`, the canonical label, and the derived binary target are **targets or
+audit metadata**, never model inputs. File path, capture day, and CSV line
+number may be retained for split assignment and traceability but must also be
+excluded from the model matrix. A future pipeline should assert these
+exclusions and unique feature names rather than relying on manual selection.
+
+`Destination Port` is available from a completed flow and remains a candidate
+feature; it is not automatically target leakage. It may be a scenario shortcut,
+so feature-importance and ablation analyses should later measure dependence on
+it. The intended prediction point is after a flow's summary has been computed;
+this audit does not establish real-time, before-flow-completion availability.
