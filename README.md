@@ -130,9 +130,11 @@ netguard-ai/
 │   ├── data-profile.json
 │   ├── data-profile.md
 │   ├── data-quality-audit.json
-│   └── data-quality-audit.md
+│   ├── data-quality-audit.md
+│   └── feature-leakage-audit.json
 └── scripts/
     ├── audit_dataset.py
+    ├── audit_feature_leakage.py
     ├── hash_dataset.py
     └── profile_dataset.py
 ```
@@ -160,6 +162,20 @@ Regenerate the schema and label profile:
 ```powershell
 python scripts/profile_dataset.py "data/raw/MachineLearningCSV/**/*.csv" --output reports/data-profile.json
 ```
+
+Audit exact repeated feature vectors and contradictory labels:
+
+```powershell
+python scripts/audit_feature_leakage.py "data/raw/MachineLearningCSV/**/*.csv" --output reports/feature-leakage-audit.json --groups-output reports/feature-leakage-groups.jsonl
+```
+
+The committed JSON contains totals and five examples per category. The complete
+JSONL is generated locally and ignored by Git because it can be large. Its
+one-based line numbers point to the original CSVs. The fingerprint excludes
+`Label` and the redundant second `Fwd Header Length` column; it compares the
+original feature-cell strings exactly, not numerically equivalent or similar
+flows. Different files are flagged, but this audit alone does not establish
+chronological order or whether a future split leaks data.
 
 Any checksum mismatch must be investigated before the affected file is used.
 

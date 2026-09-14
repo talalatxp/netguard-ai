@@ -1,1 +1,4 @@
 data/raw/
+__pycache__/
+*.pyc
+reports/feature-leakage-groups.jsonl
