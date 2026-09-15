@@ -2,15 +2,25 @@
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import sys
+import tempfile
 import unittest
 from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
-from build_splits import partition_from_unit_interval, random_partition  # noqa: E402
+from build_splits import (  # noqa: E402
+    build_split_manifest,
+    chronological_paths,
+    normalize_label,
+    partition_from_unit_interval,
+    random_partition,
+    temporal_partition,
+    validate_complete_file_set,
+)
 
 
 class PartitionFromUnitIntervalTests(unittest.TestCase):
@@ -80,6 +90,142 @@ class RandomPartitionTests(unittest.TestCase):
             with self.subTest(feature_hash=feature_hash):
                 with self.assertRaisesRegex(ValueError, "feature_hash"):
                     random_partition(feature_hash)
+
+
+class TemporalPartitionTests(unittest.TestCase):
+    def test_assigns_all_verified_dataset_files(self) -> None:
+        cases = {
+            "Monday-WorkingHours.pcap_ISCX.csv": "train",
+            "Tuesday-WorkingHours.pcap_ISCX.csv": "train",
+            "Wednesday-workingHours.pcap_ISCX.csv": "train",
+            "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv": "validation",
+            "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv": "validation",
+            "Friday-WorkingHours-Morning.pcap_ISCX.csv": "test",
+            "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv": "test",
+            "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv": "test",
+        }
+        for filename, expected in cases.items():
+            with self.subTest(filename=filename):
+                self.assertEqual(temporal_partition(Path(filename)), expected)
+
+    def test_rejects_unknown_day(self) -> None:
+        with self.assertRaisesRegex(ValueError, "unrecognized"):
+            temporal_partition(Path("Saturday-WorkingHours.csv"))
+
+    def test_rejects_filename_without_day_separator(self) -> None:
+        with self.assertRaisesRegex(ValueError, "unrecognized"):
+            temporal_partition(Path("Monday.csv"))
+
+
+class ManifestBuildTests(unittest.TestCase):
+    HEADER = [
+        " Fwd Header Length",
+        " Destination Port",
+        " Fwd Header Length",
+        " Label",
+    ]
+
+    @staticmethod
+    def write_source(path: Path, rows: list[list[str]]) -> None:
+        with path.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.writer(handle)
+            writer.writerow(ManifestBuildTests.HEADER)
+            writer.writerows(rows)
+
+    def test_chronological_paths_do_not_use_input_or_alphabetical_order(self) -> None:
+        paths = [
+            Path("Friday-WorkingHours-Morning.pcap_ISCX.csv"),
+            Path("Monday-WorkingHours.pcap_ISCX.csv"),
+            Path("Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv"),
+        ]
+        ordered = chronological_paths(paths)
+        self.assertEqual(
+            [path.name for path in ordered],
+            [
+                "Monday-WorkingHours.pcap_ISCX.csv",
+                "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+                "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+            ],
+        )
+
+    def test_complete_file_validation_rejects_a_partial_snapshot(self) -> None:
+        with self.assertRaisesRegex(ValueError, "missing"):
+            validate_complete_file_set([Path("Monday-WorkingHours.pcap_ISCX.csv")])
+
+    def test_label_normalization_preserves_binary_meaning(self) -> None:
+        self.assertEqual(normalize_label(" BENIGN "), ("BENIGN", 0))
+        self.assertEqual(
+            normalize_label("Web Attack � XSS"), ("Web Attack - XSS", 1)
+        )
+        with self.assertRaisesRegex(ValueError, "unknown"):
+            normalize_label("NEW-ATTACK")
+
+    def test_manifest_deduplicates_and_marks_temporal_novelty(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            monday = root / "Monday-WorkingHours.pcap_ISCX.csv"
+            tuesday = root / "Tuesday-WorkingHours.pcap_ISCX.csv"
+            thursday = (
+                root / "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv"
+            )
+            friday = root / "Friday-WorkingHours-Morning.pcap_ISCX.csv"
+            self.write_source(
+                monday,
+                [["1", "80", "1", "BENIGN"], ["2", "22", "2", "FTP-Patator"]],
+            )
+            self.write_source(
+                tuesday,
+                [["1", "80", "1", "BENIGN"], ["1", "80", "1", "PortScan"]],
+            )
+            self.write_source(
+                thursday, [["3", "443", "3", "Web Attack � XSS"]]
+            )
+            self.write_source(
+                friday,
+                [
+                    ["3", "443", "3", "Web Attack � XSS"],
+                    ["3", "443", "3", "Bot"],
+                    ["4", "53", "4", "BENIGN"],
+                ],
+            )
+            manifest = root / "manifest.csv"
+            report = build_split_manifest(
+                [friday, thursday, tuesday, monday], root, manifest
+            )
+
+            self.assertEqual(report["raw_rows"], 8)
+            self.assertEqual(report["retained_rows"], 6)
+            self.assertEqual(report["exact_duplicates_removed"], 2)
+            self.assertEqual(report["feature_count"], 2)
+            self.assertEqual(report["random"]["shared_feature_hash_groups"], 0)
+            self.assertEqual(report["temporal"]["test_hashes_seen_earlier"], 1)
+            self.assertEqual(report["temporal"]["test_rows_seen_earlier"], 1)
+            self.assertEqual(report["conflicting_binary_target_groups"], 1)
+            self.assertEqual(report["rows_in_conflicting_binary_target_groups"], 2)
+
+            with manifest.open("r", encoding="utf-8", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+            self.assertEqual(len(rows), 6)
+            self.assertEqual(Path(rows[0]["source_file"]).name, monday.name)
+            self.assertEqual(Path(rows[-1]["source_file"]).name, friday.name)
+
+            groups: dict[str, list[dict[str, str]]] = {}
+            for row in rows:
+                groups.setdefault(row["feature_hash"], []).append(row)
+            repeated_random_groups = [group for group in groups.values() if len(group) > 1]
+            self.assertTrue(repeated_random_groups)
+            for group in repeated_random_groups:
+                self.assertEqual(len({row["random_partition"] for row in group}), 1)
+
+            friday_bot = next(row for row in rows if row["label_canonical"] == "Bot")
+            friday_benign = next(
+                row
+                for row in rows
+                if row["temporal_partition"] == "test"
+                and row["label_canonical"] == "BENIGN"
+            )
+            self.assertEqual(friday_bot["temporal_novel"], "0")
+            self.assertEqual(friday_benign["temporal_novel"], "1")
 
 
 if __name__ == "__main__":

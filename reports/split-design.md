@@ -57,4 +57,6 @@ rare for reliable per-label conclusions.
 6. Freeze preprocessing, model, threshold, and reporting rules before the final
    test evaluation. Test is evaluated once for the final estimate.
 
-No split files or model results have been generated yet.
+The design has been implemented. Generated counts, overlap checks, and manifest
+metadata are recorded in `split-summary.json` and `split-summary.md`. The local
+manifest is reproducible from the verified raw files and is not committed.

@@ -1,0 +1,382 @@
+{
+  "generated_at_utc": "2026-09-15T08:02:07.615004+00:00",
+  "method": {
+    "full_row_deduplication": "SHA-256 of raw CSV row bytes without the line ending; retain first occurrence in explicit file and row order",
+    "feature_hash": "SHA-256 of JSON-serialized original feature-cell strings after excluding Label, the second Fwd Header Length, and eight globally constant columns",
+    "random_assignment": "SHA-256(seed + ':' + feature_hash), first 64 bits mapped to frozen 70/15/15 intervals",
+    "temporal_novel": "validation hash absent from train; test hash absent from train and validation"
+  },
+  "configuration": {
+    "random_seed": 42,
+    "random_target_fractions": {
+      "train": 0.7,
+      "validation": 0.15000000000000002,
+      "test": 0.15000000000000002
+    },
+    "ordered_files": [
+      "data/raw/MachineLearningCSV/MachineLearningCVE/Monday-WorkingHours.pcap_ISCX.csv",
+      "data/raw/MachineLearningCSV/MachineLearningCVE/Tuesday-WorkingHours.pcap_ISCX.csv",
+      "data/raw/MachineLearningCSV/MachineLearningCVE/Wednesday-workingHours.pcap_ISCX.csv",
+      "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+      "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+      "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Morning.pcap_ISCX.csv",
+      "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv"
+    ],
+    "complete_verified_file_set": true
+  },
+  "raw_rows": 2830743,
+  "retained_rows": 2522362,
+  "exact_duplicates_removed": 308381,
+  "duplicates_removed_by_label": {
+    "BENIGN": 176613,
+    "Bot": 13,
+    "DDoS": 11,
+    "DoS GoldenEye": 7,
+    "DoS Hulk": 58224,
+    "DoS Slowhttptest": 271,
+    "DoS slowloris": 411,
+    "FTP-Patator": 2005,
+    "PortScan": 68111,
+    "SSH-Patator": 2678,
+    "Web Attack - Brute Force": 37
+  },
+  "feature_count": 69,
+  "feature_names": [
+    "Destination Port",
+    "Flow Duration",
+    "Total Fwd Packets",
+    "Total Backward Packets",
+    "Total Length of Fwd Packets",
+    "Total Length of Bwd Packets",
+    "Fwd Packet Length Max",
+    "Fwd Packet Length Min",
+    "Fwd Packet Length Mean",
+    "Fwd Packet Length Std",
+    "Bwd Packet Length Max",
+    "Bwd Packet Length Min",
+    "Bwd Packet Length Mean",
+    "Bwd Packet Length Std",
+    "Flow Bytes/s",
+    "Flow Packets/s",
+    "Flow IAT Mean",
+    "Flow IAT Std",
+    "Flow IAT Max",
+    "Flow IAT Min",
+    "Fwd IAT Total",
+    "Fwd IAT Mean",
+    "Fwd IAT Std",
+    "Fwd IAT Max",
+    "Fwd IAT Min",
+    "Bwd IAT Total",
+    "Bwd IAT Mean",
+    "Bwd IAT Std",
+    "Bwd IAT Max",
+    "Bwd IAT Min",
+    "Fwd PSH Flags",
+    "Fwd URG Flags",
+    "Fwd Header Length",
+    "Bwd Header Length",
+    "Fwd Packets/s",
+    "Bwd Packets/s",
+    "Min Packet Length",
+    "Max Packet Length",
+    "Packet Length Mean",
+    "Packet Length Std",
+    "Packet Length Variance",
+    "FIN Flag Count",
+    "SYN Flag Count",
+    "RST Flag Count",
+    "PSH Flag Count",
+    "ACK Flag Count",
+    "URG Flag Count",
+    "CWE Flag Count",
+    "ECE Flag Count",
+    "Down/Up Ratio",
+    "Average Packet Size",
+    "Avg Fwd Segment Size",
+    "Avg Bwd Segment Size",
+    "Subflow Fwd Packets",
+    "Subflow Fwd Bytes",
+    "Subflow Bwd Packets",
+    "Subflow Bwd Bytes",
+    "Init_Win_bytes_forward",
+    "Init_Win_bytes_backward",
+    "act_data_pkt_fwd",
+    "min_seg_size_forward",
+    "Active Mean",
+    "Active Std",
+    "Active Max",
+    "Active Min",
+    "Idle Mean",
+    "Idle Std",
+    "Idle Max",
+    "Idle Min"
+  ],
+  "files": [
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Monday-WorkingHours.pcap_ISCX.csv",
+      "temporal_partition": "train",
+      "raw_rows": 529918,
+      "retained_rows": 502983,
+      "exact_duplicates_removed": 26935,
+      "duplicates_removed_by_label": {
+        "BENIGN": 26935
+      }
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Tuesday-WorkingHours.pcap_ISCX.csv",
+      "temporal_partition": "train",
+      "raw_rows": 445909,
+      "retained_rows": 421791,
+      "exact_duplicates_removed": 24118,
+      "duplicates_removed_by_label": {
+        "BENIGN": 19435,
+        "FTP-Patator": 2005,
+        "SSH-Patator": 2678
+      }
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Wednesday-workingHours.pcap_ISCX.csv",
+      "temporal_partition": "train",
+      "raw_rows": 692703,
+      "retained_rows": 602565,
+      "exact_duplicates_removed": 90138,
+      "duplicates_removed_by_label": {
+        "BENIGN": 31225,
+        "DoS GoldenEye": 7,
+        "DoS Hulk": 58224,
+        "DoS Slowhttptest": 271,
+        "DoS slowloris": 411
+      }
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+      "temporal_partition": "validation",
+      "raw_rows": 170366,
+      "retained_rows": 156259,
+      "exact_duplicates_removed": 14107,
+      "duplicates_removed_by_label": {
+        "BENIGN": 14070,
+        "Web Attack - Brute Force": 37
+      }
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+      "temporal_partition": "validation",
+      "raw_rows": 288602,
+      "retained_rows": 242458,
+      "exact_duplicates_removed": 46144,
+      "duplicates_removed_by_label": {
+        "BENIGN": 46144
+      }
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Morning.pcap_ISCX.csv",
+      "temporal_partition": "test",
+      "raw_rows": 191033,
+      "retained_rows": 173045,
+      "exact_duplicates_removed": 17988,
+      "duplicates_removed_by_label": {
+        "BENIGN": 17975,
+        "Bot": 13
+      }
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "temporal_partition": "test",
+      "raw_rows": 286467,
+      "retained_rows": 205494,
+      "exact_duplicates_removed": 80973,
+      "duplicates_removed_by_label": {
+        "BENIGN": 12862,
+        "PortScan": 68111
+      }
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+      "temporal_partition": "test",
+      "raw_rows": 225745,
+      "retained_rows": 217767,
+      "exact_duplicates_removed": 7978,
+      "duplicates_removed_by_label": {
+        "BENIGN": 7967,
+        "DDoS": 11
+      }
+    }
+  ],
+  "random": {
+    "partitions": {
+      "train": {
+        "rows": 1765722,
+        "benign_rows": 1467822,
+        "attack_rows": 297900,
+        "attack_rate": 0.16871285513801154,
+        "labels": {
+          "BENIGN": 1467822,
+          "Bot": 1364,
+          "DDoS": 89636,
+          "DoS GoldenEye": 7183,
+          "DoS Hulk": 120866,
+          "DoS Slowhttptest": 3629,
+          "DoS slowloris": 3739,
+          "FTP-Patator": 4194,
+          "Heartbleed": 6,
+          "Infiltration": 25,
+          "PortScan": 63489,
+          "SSH-Patator": 2265,
+          "Web Attack - Brute Force": 1038,
+          "Web Attack - Sql Injection": 14,
+          "Web Attack - XSS": 452
+        }
+      },
+      "validation": {
+        "rows": 377894,
+        "benign_rows": 313978,
+        "attack_rows": 63916,
+        "attack_rate": 0.16913737714808916,
+        "labels": {
+          "BENIGN": 313978,
+          "Bot": 294,
+          "DDoS": 19184,
+          "DoS GoldenEye": 1545,
+          "DoS Hulk": 25942,
+          "DoS Slowhttptest": 811,
+          "DoS slowloris": 793,
+          "FTP-Patator": 874,
+          "Heartbleed": 3,
+          "Infiltration": 6,
+          "PortScan": 13700,
+          "SSH-Patator": 455,
+          "Web Attack - Brute Force": 213,
+          "Web Attack - Sql Injection": 5,
+          "Web Attack - XSS": 91
+        }
+      },
+      "test": {
+        "rows": 378746,
+        "benign_rows": 314684,
+        "attack_rows": 64062,
+        "attack_rate": 0.16914238038157497,
+        "labels": {
+          "BENIGN": 314684,
+          "Bot": 295,
+          "DDoS": 19196,
+          "DoS GoldenEye": 1558,
+          "DoS Hulk": 26041,
+          "DoS Slowhttptest": 788,
+          "DoS slowloris": 853,
+          "FTP-Patator": 865,
+          "Heartbleed": 2,
+          "Infiltration": 5,
+          "PortScan": 13630,
+          "SSH-Patator": 499,
+          "Web Attack - Brute Force": 219,
+          "Web Attack - Sql Injection": 2,
+          "Web Attack - XSS": 109
+        }
+      }
+    },
+    "shared_feature_hash_groups": 0
+  },
+  "temporal": {
+    "partitions": {
+      "train": {
+        "rows": 1527339,
+        "benign_rows": 1324428,
+        "attack_rows": 202911,
+        "attack_rate": 0.1328526280020349,
+        "labels": {
+          "BENIGN": 1324428,
+          "DoS GoldenEye": 10286,
+          "DoS Hulk": 172849,
+          "DoS Slowhttptest": 5228,
+          "DoS slowloris": 5385,
+          "FTP-Patator": 5933,
+          "Heartbleed": 11,
+          "SSH-Patator": 3219
+        }
+      },
+      "validation": {
+        "rows": 398717,
+        "benign_rows": 396538,
+        "attack_rows": 2179,
+        "attack_rate": 0.005465029080776591,
+        "labels": {
+          "BENIGN": 396538,
+          "Infiltration": 36,
+          "Web Attack - Brute Force": 1470,
+          "Web Attack - Sql Injection": 21,
+          "Web Attack - XSS": 652
+        }
+      },
+      "test": {
+        "rows": 596306,
+        "benign_rows": 375518,
+        "attack_rows": 220788,
+        "attack_rate": 0.3702595647201269,
+        "labels": {
+          "BENIGN": 375518,
+          "Bot": 1953,
+          "DDoS": 128016,
+          "PortScan": 90819
+        }
+      }
+    },
+    "novel_partitions": {
+      "train": {
+        "rows": 1527339,
+        "benign_rows": 1324428,
+        "attack_rows": 202911,
+        "attack_rate": 0.1328526280020349,
+        "labels": {
+          "BENIGN": 1324428,
+          "DoS GoldenEye": 10286,
+          "DoS Hulk": 172849,
+          "DoS Slowhttptest": 5228,
+          "DoS slowloris": 5385,
+          "FTP-Patator": 5933,
+          "Heartbleed": 11,
+          "SSH-Patator": 3219
+        }
+      },
+      "validation": {
+        "rows": 398676,
+        "benign_rows": 396497,
+        "attack_rows": 2179,
+        "attack_rate": 0.005465591106562723,
+        "labels": {
+          "BENIGN": 396497,
+          "Infiltration": 36,
+          "Web Attack - Brute Force": 1470,
+          "Web Attack - Sql Injection": 21,
+          "Web Attack - XSS": 652
+        }
+      },
+      "test": {
+        "rows": 595725,
+        "benign_rows": 375503,
+        "attack_rows": 220222,
+        "attack_rate": 0.36967056947417015,
+        "labels": {
+          "BENIGN": 375503,
+          "Bot": 1953,
+          "DDoS": 128014,
+          "PortScan": 90255
+        }
+      }
+    },
+    "validation_hashes_seen_in_train": 41,
+    "validation_rows_seen_in_train": 41,
+    "test_hashes_seen_earlier": 581,
+    "test_rows_seen_earlier": 581
+  },
+  "conflicting_binary_target_groups": 698,
+  "rows_in_conflicting_binary_target_groups": 1396,
+  "manifest": {
+    "path": "data/processed/split-manifest.csv",
+    "size_bytes": 485056985,
+    "sha256": "723bfe0fa18f012b0d8e55a699b53394da5001e83dc85efa5ab34ca883025cbd",
+    "row_count": 2522362
+  }
+}

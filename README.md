@@ -130,6 +130,7 @@ netguard-ai/
 ├── data/
 │   ├── README.md
 │   ├── checksums.json
+│   ├── processed/           # generated locally; ignored by Git
 │   └── raw/                 # local only; ignored by Git
 ├── reports/
 │   ├── data-profile.json
@@ -137,7 +138,9 @@ netguard-ai/
 │   ├── data-quality-audit.json
 │   ├── data-quality-audit.md
 │   ├── feature-leakage-audit.json
-│   └── split-design.md
+│   ├── split-design.md
+│   ├── split-summary.json
+│   └── split-summary.md
 └── scripts/
     ├── audit_dataset.py
     ├── audit_feature_leakage.py
@@ -187,6 +190,17 @@ evaluation policy for repeated vectors and conflicting labels.
 The [split design](reports/split-design.md) records the frozen temporal days,
 raw day-level counts, and the remaining reproducibility checks.
 
+Build the deduplicated row manifest and both split assignments:
+
+```powershell
+python scripts/build_splits.py "data/raw/MachineLearningCSV/**/*.csv" --manifest-output data/processed/split-manifest.csv --report-output reports/split-summary.json
+```
+
+The manifest is a generated local artifact and is ignored by Git. The committed
+[split summary](reports/split-summary.md) records its filename, size, SHA-256,
+actual partition counts, and overlap checks. Rebuilding from the verified raw
+files with the same code and seed must reproduce the same manifest hash.
+
 Any checksum mismatch must be investigated before the affected file is used.
 
 ## Roadmap
@@ -197,7 +211,7 @@ Any checksum mismatch must be investigated before the affected file is used.
 - [x] Profile schemas, row counts, and labels.
 - [x] Audit types, missing values, infinities, and duplicates.
 - [x] Audit pre-split feature leakage risks and record evaluation safeguards.
-- [ ] Freeze random and temporal partitions and verify cross-partition overlap.
+- [x] Freeze and build random and temporal partitions; verify overlap controls.
 - [ ] Build the preprocessing pipeline and learned baseline.
 - [ ] Compare Random Forest and gradient boosting.
 - [ ] Analyze errors, attack coverage, and feature importance.
