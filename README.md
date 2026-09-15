@@ -68,7 +68,7 @@ values, exact duplicates, and the proposed cleaning policy.
 
 ### Evaluation A: random reference
 
-- Fixed random seed.
+- Fixed random seed `42`, targeting 70% train, 15% validation, and 15% test.
 - Group-aware train, validation, and test partitions by exact feature hash;
   check class balance because mixed-label groups limit strict stratification.
 - Included as a reference comparable with common introductory approaches.
@@ -77,12 +77,13 @@ values, exact duplicates, and the proposed cleaning policy.
 ### Evaluation B: temporal
 
 - Chronological `train -> validation -> test` ordering.
+- Frozen days: Monday–Wednesday train, Thursday validation, Friday test.
 - Primary metrics cover all later rows remaining after the agreed exact
   full-row deduplication. Report metrics separately for feature hashes absent
   from earlier partitions.
 - Later data is never used to fit transformations or models.
-- Exact day assignments will be frozen after exploratory analysis of volume,
-  class balance, attack coverage, and rare labels.
+- Because attack families differ by day, this test combines temporal and
+  unseen-attack generalization; a performance gap cannot isolate time alone.
 - Attacks present during training and attacks absent from training will be
   reported separately.
 
@@ -135,7 +136,8 @@ netguard-ai/
 │   ├── data-profile.md
 │   ├── data-quality-audit.json
 │   ├── data-quality-audit.md
-│   └── feature-leakage-audit.json
+│   ├── feature-leakage-audit.json
+│   └── split-design.md
 └── scripts/
     ├── audit_dataset.py
     ├── audit_feature_leakage.py
@@ -182,6 +184,8 @@ flows. Different files are flagged, but this audit alone does not establish
 chronological order or whether a future split leaks data.
 The [leakage-audit interpretation](reports/feature-leakage-audit.md) records the
 evaluation policy for repeated vectors and conflicting labels.
+The [split design](reports/split-design.md) records the frozen temporal days,
+raw day-level counts, and the remaining reproducibility checks.
 
 Any checksum mismatch must be investigated before the affected file is used.
 
