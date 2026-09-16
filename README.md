@@ -5,15 +5,16 @@ built on labelled flow data from CIC-IDS2017. It classifies each network flow as
 `BENIGN` or `ATTACK` and studies how evaluation methodology changes the apparent
 ability of a supervised model to generalize.
 
-> **Status:** active development. Dataset provenance and the first reproducible
-> schema and label profile are complete. Data-quality auditing, preprocessing,
-> model training, and final evaluation are not complete yet.
+> **Status:** active development. Dataset provenance, quality auditing,
+> leakage-controlled splits, preprocessing, and the first learned baseline are
+> complete. Tree-model comparison, error analysis, and the demo remain open.
 
 ## Research question
 
 How much does a supervised classifier's ability to detect malicious traffic
-degrade when moving from a stratified random split to a strict day-based temporal
-evaluation, and can it maintain a useful false-positive rate on later traffic?
+degrade when moving from a group-aware random split to a strict day-based
+temporal evaluation, and can it maintain a useful false-positive rate on later
+traffic?
 
 The product objective and the experimental question are deliberately separate:
 
@@ -138,24 +139,32 @@ netguard-ai/
 │   ├── data-quality-audit.json
 │   ├── data-quality-audit.md
 │   ├── feature-leakage-audit.json
+│   ├── ai-07-baseline-results.json
+│   ├── ai-07-baseline-results.md
+│   ├── ai-07-validation.json
 │   ├── split-design.md
 │   ├── split-summary.json
 │   └── split-summary.md
 └── scripts/
     ├── audit_dataset.py
     ├── audit_feature_leakage.py
+    ├── build_model_matrix.py
+    ├── build_splits.py
     ├── hash_dataset.py
-    └── profile_dataset.py
+    ├── model_data.py
+    ├── preprocessing.py
+    ├── profile_dataset.py
+    └── train_baselines.py
 ```
 
-The repository will grow to include a tested Python package, experiment
-configuration, model artifacts, an evaluation report, a model card, and a small
-local inference demo. Planned components are not shown above as if they already
-exist.
+The repository will grow to include tree-model comparisons, detailed error
+analysis, a model card, reproducible release metadata, and a small local
+inference demo. Planned components are not shown above as if they already exist.
 
 ## Reproduce the current data checks
 
-The current scripts use only the Python standard library. They have been verified
+The audit and split scripts use the Python standard library. AI-07 additionally
+uses the pinned packages in `requirements.txt`. All scripts have been verified
 locally with Python 3.14. Detailed download instructions are in
 [`data/README.md`](data/README.md).
 
@@ -201,6 +210,26 @@ The manifest is a generated local artifact and is ignored by Git. The committed
 actual partition counts, and overlap checks. Rebuilding from the verified raw
 files with the same code and seed must reproduce the same manifest hash.
 
+Create the local environment and materialize the compact model matrix:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe scripts/build_model_matrix.py
+```
+
+The official validation and final-test records are committed. To reproduce them
+without overwriting those records, write artifacts under the ignored processed
+directory:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/train_baselines.py validation --models-dir data/processed/reproduction/models --validation-output data/processed/reproduction/validation.json
+.\.venv\Scripts\python.exe scripts/train_baselines.py test --validation-output data/processed/reproduction/validation.json --test-output data/processed/reproduction/results.json
+```
+
+The [AI-07 baseline report](reports/ai-07-baseline-results.md) records the frozen
+thresholds, validation decisions, one-time final test, and limitations.
+
 Any checksum mismatch must be investigated before the affected file is used.
 
 ## Roadmap
@@ -212,7 +241,7 @@ Any checksum mismatch must be investigated before the affected file is used.
 - [x] Audit types, missing values, infinities, and duplicates.
 - [x] Audit pre-split feature leakage risks and record evaluation safeguards.
 - [x] Freeze and build random and temporal partitions; verify overlap controls.
-- [ ] Build the preprocessing pipeline and learned baseline.
+- [x] Build the preprocessing pipeline and learned baseline.
 - [ ] Compare Random Forest and gradient boosting.
 - [ ] Analyze errors, attack coverage, and feature importance.
 - [ ] Build and test the local inference demo.

@@ -12,6 +12,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 from preprocessing import (  # noqa: E402
+    build_logistic_baseline,
     build_logistic_preprocessor,
     replace_non_finite_values,
 )
@@ -95,6 +96,34 @@ class BuildLogisticPreprocessorTests(unittest.TestCase):
         )
         self.assertEqual(transformed_validation.shape, (1, 4))
         self.assertAlmostEqual(transformed_validation[0, 0], 0.0)
+
+    def test_logistic_baseline_uses_the_frozen_configuration(self) -> None:
+        baseline = build_logistic_baseline(seed=42)
+
+        self.assertEqual(
+            list(baseline.named_steps),
+            ["non_finite", "imputer", "scaler", "classifier"],
+        )
+        classifier = baseline.named_steps["classifier"]
+        self.assertEqual(classifier.loss, "log_loss")
+        self.assertEqual(classifier.class_weight, "balanced")
+        self.assertEqual(classifier.random_state, 42)
+
+    def test_logistic_baseline_fits_and_returns_attack_probabilities(self) -> None:
+        frame = pd.DataFrame(
+            {
+                "Flow Bytes/s": [1.0, 2.0, np.inf, 4.0, 5.0, 6.0],
+                "Flow Packets/s": [1.0, 2.0, 3.0, 4.0, np.nan, 6.0],
+            }
+        )
+        targets = np.array([0, 0, 0, 1, 1, 1], dtype=np.uint8)
+        baseline = build_logistic_baseline(seed=42)
+
+        baseline.fit(frame, targets)
+        probabilities = baseline.predict_proba(frame)
+
+        self.assertEqual(probabilities.shape, (6, 2))
+        np.testing.assert_allclose(probabilities.sum(axis=1), 1.0)
 
 
 if __name__ == "__main__":

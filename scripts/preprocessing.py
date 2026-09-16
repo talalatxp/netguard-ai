@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from sklearn.impute import SimpleImputer
+from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, StandardScaler
 
@@ -43,5 +44,29 @@ def build_logistic_preprocessor() -> Pipeline:
             ),
             ("imputer", SimpleImputer(strategy="median")),
             ("scaler", StandardScaler()),
+        ]
+    )
+
+
+def build_logistic_baseline(seed: int = 42) -> Pipeline:
+    """Build the fixed leakage-safe logistic-regression baseline."""
+    preprocessor = build_logistic_preprocessor()
+    return Pipeline(
+        steps=[
+            *preprocessor.steps,
+            (
+                "classifier",
+                SGDClassifier(
+                    loss="log_loss",
+                    penalty="l2",
+                    alpha=0.0001,
+                    class_weight="balanced",
+                    max_iter=50,
+                    tol=0.001,
+                    shuffle=True,
+                    random_state=seed,
+                    average=True,
+                ),
+            ),
         ]
     )
