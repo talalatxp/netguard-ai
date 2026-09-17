@@ -7,7 +7,8 @@ ability of a supervised model to generalize.
 
 > **Status:** active development. Dataset provenance, quality auditing,
 > leakage-controlled splits, preprocessing, learned-model comparison, and
-> error analysis are complete. The local demo and final release remain open.
+> error analysis, and the local explanatory demo are complete. The model card
+> and final reproducible release remain open.
 
 ## Research question
 
@@ -113,21 +114,24 @@ Primary reporting includes:
 
 Accuracy will never be reported on its own.
 
-## Planned model comparison
+## Frozen model comparison
 
 1. `DummyClassifier` as a trivial reference.
 2. Logistic regression as an interpretable learned baseline.
 3. Random Forest.
 4. Histogram-based gradient boosting.
 
-No additional model will be added before the required evaluation, documentation,
-and demo are complete.
+No additional model was added before the required evaluation, documentation,
+and demo were complete.
 
 ## Repository contents
 
 ```text
 netguard-ai/
+├── .streamlit/
+│   └── config.toml
 ├── README.md
+├── app.py
 ├── data/
 │   ├── README.md
 │   ├── checksums.json
@@ -147,6 +151,7 @@ netguard-ai/
 │   ├── ai-08-validation.json
 │   ├── ai-09-error-analysis.json
 │   ├── ai-09-error-analysis.md
+│   ├── ai-10-local-demo.md
 │   ├── split-design.md
 │   ├── split-summary.json
 │   └── split-summary.md
@@ -157,6 +162,7 @@ netguard-ai/
     ├── build_model_matrix.py
     ├── build_splits.py
     ├── hash_dataset.py
+    ├── inference.py
     ├── model_data.py
     ├── preprocessing.py
     ├── profile_dataset.py
@@ -164,13 +170,12 @@ netguard-ai/
     └── train_tree_models.py
 ```
 
-The repository will grow to include a model card, reproducible release metadata,
-and a small local inference demo. Planned components are not shown above as if
-they already exist.
+The repository will grow to include a model card and reproducible release
+metadata. Planned components are not shown above as if they already exist.
 
 ## Reproduce the current data checks
 
-The audit and split scripts use the Python standard library. AI-07 through AI-09
+The audit and split scripts use the Python standard library. AI-07 through AI-10
 additionally use the pinned packages in `requirements.txt`. All scripts have
 been verified locally with Python 3.14. Detailed download instructions are in
 [`data/README.md`](data/README.md).
@@ -260,6 +265,19 @@ shift, attack-family coverage, source-file errors, and validation-only
 permutation importance. Post-test findings are descriptive and cannot be used
 to revise the reported test result.
 
+Run the AI-10 local explanatory demo after reproducing the ignored AI-07 and
+AI-08 model artifacts:
+
+```powershell
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+Open `http://localhost:8501`. The demo accepts prepared CSV rows using the 69
+frozen feature columns, verifies the selected artifact hash, applies its frozen
+threshold, and provides downloadable decisions. The
+[AI-10 demo report](reports/ai-10-local-demo.md) records the input contract,
+safety boundaries, verification, and limitations.
+
 Any checksum mismatch must be investigated before the affected file is used.
 
 ## Roadmap
@@ -274,7 +292,7 @@ Any checksum mismatch must be investigated before the affected file is used.
 - [x] Build the preprocessing pipeline and learned baseline.
 - [x] Compare Random Forest and gradient boosting.
 - [x] Analyze errors, attack coverage, and feature importance.
-- [ ] Build and test the local inference demo.
+- [x] Build and test the local inference demo.
 - [ ] Publish the final report, model card, and reproducible release.
 
 ## Limitations and intended use
