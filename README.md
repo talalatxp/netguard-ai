@@ -6,8 +6,8 @@ built on labelled flow data from CIC-IDS2017. It classifies each network flow as
 ability of a supervised model to generalize.
 
 > **Status:** active development. Dataset provenance, quality auditing,
-> leakage-controlled splits, preprocessing, the learned baseline, and the tree-
-> model comparison are complete. Error analysis and the demo remain open.
+> leakage-controlled splits, preprocessing, learned-model comparison, and
+> error analysis are complete. The local demo and final release remain open.
 
 ## Research question
 
@@ -145,12 +145,15 @@ netguard-ai/
 │   ├── ai-08-model-comparison-results.json
 │   ├── ai-08-model-comparison-results.md
 │   ├── ai-08-validation.json
+│   ├── ai-09-error-analysis.json
+│   ├── ai-09-error-analysis.md
 │   ├── split-design.md
 │   ├── split-summary.json
 │   └── split-summary.md
 └── scripts/
     ├── audit_dataset.py
     ├── audit_feature_leakage.py
+    ├── analyze_errors.py
     ├── build_model_matrix.py
     ├── build_splits.py
     ├── hash_dataset.py
@@ -161,13 +164,13 @@ netguard-ai/
     └── train_tree_models.py
 ```
 
-The repository will grow to include detailed error analysis, a model card,
-reproducible release metadata, and a small local inference demo. Planned
-components are not shown above as if they already exist.
+The repository will grow to include a model card, reproducible release metadata,
+and a small local inference demo. Planned components are not shown above as if
+they already exist.
 
 ## Reproduce the current data checks
 
-The audit and split scripts use the Python standard library. AI-07 and AI-08
+The audit and split scripts use the Python standard library. AI-07 through AI-09
 additionally use the pinned packages in `requirements.txt`. All scripts have
 been verified locally with Python 3.14. Detailed download instructions are in
 [`data/README.md`](data/README.md).
@@ -245,6 +248,18 @@ The [AI-08 comparison report](reports/ai-08-model-comparison-results.md) records
 the frozen model configurations, validation winners, final test results, and
 the observed temporal threshold instability.
 
+Reproduce the AI-09 descriptive analysis without modifying frozen models or
+thresholds:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/analyze_errors.py --output data/processed/reproduction-ai09.json
+```
+
+The [AI-09 error analysis](reports/ai-09-error-analysis.md) explains score
+shift, attack-family coverage, source-file errors, and validation-only
+permutation importance. Post-test findings are descriptive and cannot be used
+to revise the reported test result.
+
 Any checksum mismatch must be investigated before the affected file is used.
 
 ## Roadmap
@@ -258,7 +273,7 @@ Any checksum mismatch must be investigated before the affected file is used.
 - [x] Freeze and build random and temporal partitions; verify overlap controls.
 - [x] Build the preprocessing pipeline and learned baseline.
 - [x] Compare Random Forest and gradient boosting.
-- [ ] Analyze errors, attack coverage, and feature importance.
+- [x] Analyze errors, attack coverage, and feature importance.
 - [ ] Build and test the local inference demo.
 - [ ] Publish the final report, model card, and reproducible release.
 
