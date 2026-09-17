@@ -6,8 +6,8 @@ built on labelled flow data from CIC-IDS2017. It classifies each network flow as
 ability of a supervised model to generalize.
 
 > **Status:** active development. Dataset provenance, quality auditing,
-> leakage-controlled splits, preprocessing, and the first learned baseline are
-> complete. Tree-model comparison, error analysis, and the demo remain open.
+> leakage-controlled splits, preprocessing, the learned baseline, and the tree-
+> model comparison are complete. Error analysis and the demo remain open.
 
 ## Research question
 
@@ -142,6 +142,9 @@ netguard-ai/
 │   ├── ai-07-baseline-results.json
 │   ├── ai-07-baseline-results.md
 │   ├── ai-07-validation.json
+│   ├── ai-08-model-comparison-results.json
+│   ├── ai-08-model-comparison-results.md
+│   ├── ai-08-validation.json
 │   ├── split-design.md
 │   ├── split-summary.json
 │   └── split-summary.md
@@ -154,18 +157,19 @@ netguard-ai/
     ├── model_data.py
     ├── preprocessing.py
     ├── profile_dataset.py
-    └── train_baselines.py
+    ├── train_baselines.py
+    └── train_tree_models.py
 ```
 
-The repository will grow to include tree-model comparisons, detailed error
-analysis, a model card, reproducible release metadata, and a small local
-inference demo. Planned components are not shown above as if they already exist.
+The repository will grow to include detailed error analysis, a model card,
+reproducible release metadata, and a small local inference demo. Planned
+components are not shown above as if they already exist.
 
 ## Reproduce the current data checks
 
-The audit and split scripts use the Python standard library. AI-07 additionally
-uses the pinned packages in `requirements.txt`. All scripts have been verified
-locally with Python 3.14. Detailed download instructions are in
+The audit and split scripts use the Python standard library. AI-07 and AI-08
+additionally use the pinned packages in `requirements.txt`. All scripts have
+been verified locally with Python 3.14. Detailed download instructions are in
 [`data/README.md`](data/README.md).
 
 After placing the official archive and its extracted CSV files under `data/raw/`,
@@ -230,6 +234,17 @@ directory:
 The [AI-07 baseline report](reports/ai-07-baseline-results.md) records the frozen
 thresholds, validation decisions, one-time final test, and limitations.
 
+Reproduce the AI-08 tree comparison into ignored local outputs:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/train_tree_models.py validation --models-dir data/processed/reproduction-ai08/models --validation-output data/processed/reproduction-ai08/validation.json
+.\.venv\Scripts\python.exe scripts/train_tree_models.py test --validation-output data/processed/reproduction-ai08/validation.json --test-output data/processed/reproduction-ai08/results.json
+```
+
+The [AI-08 comparison report](reports/ai-08-model-comparison-results.md) records
+the frozen model configurations, validation winners, final test results, and
+the observed temporal threshold instability.
+
 Any checksum mismatch must be investigated before the affected file is used.
 
 ## Roadmap
@@ -242,7 +257,7 @@ Any checksum mismatch must be investigated before the affected file is used.
 - [x] Audit pre-split feature leakage risks and record evaluation safeguards.
 - [x] Freeze and build random and temporal partitions; verify overlap controls.
 - [x] Build the preprocessing pipeline and learned baseline.
-- [ ] Compare Random Forest and gradient boosting.
+- [x] Compare Random Forest and gradient boosting.
 - [ ] Analyze errors, attack coverage, and feature importance.
 - [ ] Build and test the local inference demo.
 - [ ] Publish the final report, model card, and reproducible release.

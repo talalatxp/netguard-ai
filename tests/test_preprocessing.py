@@ -12,8 +12,11 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 from preprocessing import (  # noqa: E402
+    build_hist_gradient_boosting_baseline,
     build_logistic_baseline,
     build_logistic_preprocessor,
+    build_random_forest_baseline,
+    build_tree_preprocessor,
     replace_non_finite_values,
 )
 
@@ -124,6 +127,53 @@ class BuildLogisticPreprocessorTests(unittest.TestCase):
 
         self.assertEqual(probabilities.shape, (6, 2))
         np.testing.assert_allclose(probabilities.sum(axis=1), 1.0)
+
+
+class BuildTreePreprocessorTests(unittest.TestCase):
+    def test_tree_preprocessor_imputes_without_scaling(self) -> None:
+        preprocessor = build_tree_preprocessor()
+
+        self.assertEqual(list(preprocessor.named_steps), ["non_finite", "imputer"])
+        self.assertNotIn("scaler", preprocessor.named_steps)
+
+    def test_tree_models_use_the_frozen_resource_aware_configuration(self) -> None:
+        forest = build_random_forest_baseline(seed=42).named_steps["classifier"]
+        boosting = build_hist_gradient_boosting_baseline(seed=42).named_steps[
+            "classifier"
+        ]
+
+        self.assertEqual(forest.n_estimators, 80)
+        self.assertEqual(forest.max_depth, 18)
+        self.assertEqual(forest.max_samples, 0.35)
+        self.assertEqual(forest.random_state, 42)
+        self.assertEqual(boosting.max_iter, 150)
+        self.assertEqual(boosting.max_leaf_nodes, 31)
+        self.assertTrue(boosting.early_stopping)
+        self.assertEqual(boosting.random_state, 42)
+
+    def test_tree_models_fit_and_return_attack_probabilities(self) -> None:
+        bytes_per_second = np.arange(1, 41, dtype=float)
+        packets_per_second = np.repeat(np.arange(1, 21, dtype=float), 2)
+        bytes_per_second[10] = np.inf
+        packets_per_second[30] = np.nan
+        frame = pd.DataFrame(
+            {
+                "Flow Bytes/s": bytes_per_second,
+                "Flow Packets/s": packets_per_second,
+            }
+        )
+        targets = np.array([0] * 20 + [1] * 20, dtype=np.uint8)
+
+        for builder in (
+            build_random_forest_baseline,
+            build_hist_gradient_boosting_baseline,
+        ):
+            with self.subTest(builder=builder.__name__):
+                model = builder(seed=42)
+                model.fit(frame, targets)
+                probabilities = model.predict_proba(frame)
+                self.assertEqual(probabilities.shape, (40, 2))
+                np.testing.assert_allclose(probabilities.sum(axis=1), 1.0)
 
 
 if __name__ == "__main__":

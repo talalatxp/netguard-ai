@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import Pipeline
@@ -66,6 +67,70 @@ def build_logistic_baseline(seed: int = 42) -> Pipeline:
                     shuffle=True,
                     random_state=seed,
                     average=True,
+                ),
+            ),
+        ]
+    )
+
+
+def build_tree_preprocessor() -> Pipeline:
+    """Build an unfitted preprocessing pipeline for tree classifiers."""
+    return Pipeline(
+        steps=[
+            (
+                "non_finite",
+                FunctionTransformer(replace_non_finite_values, validate=False),
+            ),
+            ("imputer", SimpleImputer(strategy="median")),
+        ]
+    )
+
+
+def build_random_forest_baseline(seed: int = 42) -> Pipeline:
+    """Build the fixed resource-aware Random Forest comparison model."""
+    preprocessor = build_tree_preprocessor()
+    return Pipeline(
+        steps=[
+            *preprocessor.steps,
+            (
+                "classifier",
+                RandomForestClassifier(
+                    n_estimators=80,
+                    max_depth=18,
+                    min_samples_leaf=20,
+                    max_features="sqrt",
+                    bootstrap=True,
+                    max_samples=0.35,
+                    class_weight="balanced_subsample",
+                    n_jobs=2,
+                    random_state=seed,
+                ),
+            ),
+        ]
+    )
+
+
+def build_hist_gradient_boosting_baseline(seed: int = 42) -> Pipeline:
+    """Build the fixed histogram gradient-boosting comparison model."""
+    preprocessor = build_tree_preprocessor()
+    return Pipeline(
+        steps=[
+            *preprocessor.steps,
+            (
+                "classifier",
+                HistGradientBoostingClassifier(
+                    loss="log_loss",
+                    learning_rate=0.08,
+                    max_iter=150,
+                    max_leaf_nodes=31,
+                    min_samples_leaf=50,
+                    l2_regularization=1.0,
+                    class_weight="balanced",
+                    early_stopping=True,
+                    validation_fraction=0.1,
+                    n_iter_no_change=15,
+                    tol=1e-7,
+                    random_state=seed,
                 ),
             ),
         ]

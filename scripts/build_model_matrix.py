@@ -225,7 +225,7 @@ def build_model_matrix(
         )
 
         for path in temporary_path.iterdir():
-            shutil.move(str(path), output_directory / path.name)
+            shutil.copy2(path, output_directory / path.name)
 
     return metadata
 
