@@ -5,10 +5,9 @@ built on labelled flow data from CIC-IDS2017. It classifies each network flow as
 `BENIGN` or `ATTACK` and studies how evaluation methodology changes the apparent
 ability of a supervised model to generalize.
 
-> **Status:** active development. Dataset provenance, quality auditing,
-> leakage-controlled splits, preprocessing, learned-model comparison, and
-> error analysis, and the local explanatory demo are complete. The model card
-> and final reproducible release remain open.
+> **Release:** `0.1.0`. Dataset provenance, quality auditing, leakage-controlled
+> splits, frozen model comparison, error analysis, model card, local explanatory
+> demo, and reproducible source release are complete.
 
 ## Research question
 
@@ -130,7 +129,9 @@ and demo were complete.
 netguard-ai/
 ├── .streamlit/
 │   └── config.toml
+├── MODEL_CARD.md
 ├── README.md
+├── VERSION
 ├── app.py
 ├── data/
 │   ├── README.md
@@ -152,14 +153,21 @@ netguard-ai/
 │   ├── ai-09-error-analysis.json
 │   ├── ai-09-error-analysis.md
 │   ├── ai-10-local-demo.md
+│   ├── ai-11-release.md
+│   ├── final-report.md
 │   ├── split-design.md
 │   ├── split-summary.json
 │   └── split-summary.md
+├── release/
+│   ├── RELEASE_NOTES.md
+│   ├── release-files.txt
+│   └── release-manifest.json
 └── scripts/
     ├── audit_dataset.py
     ├── audit_feature_leakage.py
     ├── analyze_errors.py
     ├── build_model_matrix.py
+    ├── build_release.py
     ├── build_splits.py
     ├── hash_dataset.py
     ├── inference.py
@@ -170,8 +178,8 @@ netguard-ai/
     └── train_tree_models.py
 ```
 
-The repository will grow to include a model card and reproducible release
-metadata. Planned components are not shown above as if they already exist.
+Generated release bundles are written under ignored `dist/` and are not shown
+as committed source files.
 
 ## Reproduce the current data checks
 
@@ -278,6 +286,34 @@ threshold, and provides downloadable decisions. The
 [AI-10 demo report](reports/ai-10-local-demo.md) records the input contract,
 safety boundaries, verification, and limitations.
 
+## Reproduce release 0.1.0
+
+The [model card](MODEL_CARD.md) defines intended use, metrics, known failures,
+and ethical limitations. The [final report](reports/final-report.md) presents the
+complete experiment and conclusion. The machine-readable
+[release manifest](release/release-manifest.json) records every included source
+file plus the external dataset and model hashes.
+The [AI-11 release record](reports/ai-11-release.md) defines the publication
+boundary and verification criteria.
+
+After reproducing the ignored data and model artifacts, verify the committed
+release contract:
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests -q
+.\.venv\Scripts\python.exe scripts/build_release.py check --require-models
+```
+
+Rebuild the deterministic source ZIP and checksum file:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/build_release.py build --require-models
+```
+
+This creates `dist/netguard-ai-0.1.0-source.zip` and `dist/SHA256SUMS`. Raw data
+and model binaries are not placed in the ZIP. No software or model license has
+been declared; the release metadata does not grant reuse rights.
+
 Any checksum mismatch must be investigated before the affected file is used.
 
 ## Roadmap
@@ -293,7 +329,7 @@ Any checksum mismatch must be investigated before the affected file is used.
 - [x] Compare Random Forest and gradient boosting.
 - [x] Analyze errors, attack coverage, and feature importance.
 - [x] Build and test the local inference demo.
-- [ ] Publish the final report, model card, and reproducible release.
+- [x] Publish the final report, model card, and reproducible release.
 
 ## Limitations and intended use
 

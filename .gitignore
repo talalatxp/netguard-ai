@@ -5,3 +5,4 @@ __pycache__/
 reports/feature-leakage-groups.jsonl
 .venv/
 models/
+dist/
