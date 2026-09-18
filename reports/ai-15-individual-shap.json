@@ -1,0 +1,772 @@
+{
+  "stage": "ai_15_frozen_individual_shap_explanations",
+  "generated_at_utc": "2026-09-18T08:45:18.775681+00:00",
+  "contract": {
+    "descriptive_post_test_analysis_only": true,
+    "model_retrained": false,
+    "threshold_changed": false,
+    "feature_selection_performed": false,
+    "examples_selected_without_label_or_feature_inspection": true
+  },
+  "selection": {
+    "evaluation": "random",
+    "partition": "test",
+    "model": "hist_gradient_boosting",
+    "policy": "minimum, median, and maximum score within each error category",
+    "categories": {
+      "true_positive": {
+        "available_rows": 55953,
+        "selected_rows": 3
+      },
+      "false_positive": {
+        "available_rows": 5,
+        "selected_rows": 3
+      },
+      "false_negative": {
+        "available_rows": 8109,
+        "selected_rows": 3
+      }
+    }
+  },
+  "environment": {
+    "python": "3.14.6",
+    "scikit_learn": "1.9.1",
+    "shap": "0.52.0",
+    "joblib": "1.6.0"
+  },
+  "model": {
+    "artifact": "models/ai-08/random-hist_gradient_boosting.joblib",
+    "artifact_sha256": "1267d8ef0ba38e4ed336df4cca3863037a7f9c32c23c5be1f90a0d92120f498b",
+    "frozen_threshold": 0.9975500791153585,
+    "test_metrics": {
+      "rows": 378746,
+      "attack_rows": 64062,
+      "threshold": 0.9975500791153585,
+      "attack_precision": 0.9999106472711676,
+      "attack_recall": 0.8734194998595111,
+      "attack_f1": 0.93239460089985,
+      "pr_auc": 0.9998471295492344,
+      "false_positive_rate": 1.5888955269413127e-05,
+      "false_positive_count": 5,
+      "confusion_matrix": {
+        "true_negative": 314679,
+        "false_positive": 5,
+        "false_negative": 8109,
+        "true_positive": 55953
+      }
+    }
+  },
+  "explanation": {
+    "algorithm": "SHAP TreeExplainer",
+    "model_output": "raw log-odds",
+    "feature_perturbation": "tree_path_dependent",
+    "additivity": "sigmoid(base_value + sum(SHAP)) = attack_score",
+    "maximum_reconstruction_absolute_error": 4.404571325722362e-20,
+    "transformed_feature_count": 71,
+    "transformed_feature_names": [
+      "Destination Port",
+      "Flow Duration",
+      "Total Fwd Packets",
+      "Total Backward Packets",
+      "Total Length of Fwd Packets",
+      "Total Length of Bwd Packets",
+      "Fwd Packet Length Max",
+      "Fwd Packet Length Min",
+      "Fwd Packet Length Mean",
+      "Fwd Packet Length Std",
+      "Bwd Packet Length Max",
+      "Bwd Packet Length Min",
+      "Bwd Packet Length Mean",
+      "Bwd Packet Length Std",
+      "Flow Bytes/s",
+      "Flow Packets/s",
+      "Flow IAT Mean",
+      "Flow IAT Std",
+      "Flow IAT Max",
+      "Flow IAT Min",
+      "Fwd IAT Total",
+      "Fwd IAT Mean",
+      "Fwd IAT Std",
+      "Fwd IAT Max",
+      "Fwd IAT Min",
+      "Bwd IAT Total",
+      "Bwd IAT Mean",
+      "Bwd IAT Std",
+      "Bwd IAT Max",
+      "Bwd IAT Min",
+      "Fwd PSH Flags",
+      "Fwd URG Flags",
+      "Fwd Header Length",
+      "Bwd Header Length",
+      "Fwd Packets/s",
+      "Bwd Packets/s",
+      "Min Packet Length",
+      "Max Packet Length",
+      "Packet Length Mean",
+      "Packet Length Std",
+      "Packet Length Variance",
+      "FIN Flag Count",
+      "SYN Flag Count",
+      "RST Flag Count",
+      "PSH Flag Count",
+      "ACK Flag Count",
+      "URG Flag Count",
+      "CWE Flag Count",
+      "ECE Flag Count",
+      "Down/Up Ratio",
+      "Average Packet Size",
+      "Avg Fwd Segment Size",
+      "Avg Bwd Segment Size",
+      "Subflow Fwd Packets",
+      "Subflow Fwd Bytes",
+      "Subflow Bwd Packets",
+      "Subflow Bwd Bytes",
+      "Init_Win_bytes_forward",
+      "Init_Win_bytes_backward",
+      "act_data_pkt_fwd",
+      "min_seg_size_forward",
+      "Active Mean",
+      "Active Std",
+      "Active Max",
+      "Active Min",
+      "Idle Mean",
+      "Idle Std",
+      "Idle Max",
+      "Idle Min",
+      "Flow Bytes/s__missing",
+      "Flow Packets/s__missing"
+    ]
+  },
+  "examples": [
+    {
+      "category": "true_positive",
+      "score_range_rank": 1,
+      "matrix_row_index_zero_based": 1014952,
+      "source_file": "Wednesday-workingHours.pcap_ISCX.csv",
+      "label": "DoS Hulk",
+      "target": "ATTACK",
+      "prediction": "ATTACK",
+      "attack_score": 0.9975513046087816,
+      "frozen_threshold": 0.9975500791153585,
+      "score_margin": 1.2254934230737646e-06,
+      "base_log_odds": -6.995060367868704,
+      "output_log_odds": 6.0097481912816955,
+      "reconstructed_attack_score": 0.9975513046087816,
+      "reconstruction_absolute_error": 0.0,
+      "top_toward_attack": [
+        {
+          "feature": "Init_Win_bytes_backward",
+          "model_input_value": 235.0,
+          "shap_log_odds": 3.9115036122196085
+        },
+        {
+          "feature": "Destination Port",
+          "model_input_value": 80.0,
+          "shap_log_odds": 2.5819483317970056
+        },
+        {
+          "feature": "Packet Length Std",
+          "model_input_value": 1466.939208984375,
+          "shap_log_odds": 1.7663583646267325
+        },
+        {
+          "feature": "Init_Win_bytes_forward",
+          "model_input_value": 29200.0,
+          "shap_log_odds": 1.0946828926233685
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "model_input_value": 1932.5,
+          "shap_log_odds": 0.9890915290102749
+        }
+      ],
+      "top_toward_benign": [
+        {
+          "feature": "Total Length of Fwd Packets",
+          "model_input_value": 410.0,
+          "shap_log_odds": -0.2684244317811771
+        },
+        {
+          "feature": "Bwd Header Length",
+          "model_input_value": 200.0,
+          "shap_log_odds": -0.22315488820937998
+        },
+        {
+          "feature": "Fwd Packet Length Std",
+          "model_input_value": 236.71360778808594,
+          "shap_log_odds": -0.1731766456464501
+        },
+        {
+          "feature": "Fwd Packet Length Max",
+          "model_input_value": 410.0,
+          "shap_log_odds": -0.10493130774376809
+        },
+        {
+          "feature": "Bwd Packets/s",
+          "model_input_value": 30.747312545776367,
+          "shap_log_odds": -0.1034474211847974
+        }
+      ]
+    },
+    {
+      "category": "true_positive",
+      "score_range_rank": 2,
+      "matrix_row_index_zero_based": 2325375,
+      "source_file": "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+      "label": "DDoS",
+      "target": "ATTACK",
+      "prediction": "ATTACK",
+      "attack_score": 0.9999794108173865,
+      "frozen_threshold": 0.9975500791153585,
+      "score_margin": 0.0024293317020279703,
+      "base_log_odds": -6.995060367868704,
+      "output_log_odds": 10.790724146544424,
+      "reconstructed_attack_score": 0.9999794108173865,
+      "reconstruction_absolute_error": 0.0,
+      "top_toward_attack": [
+        {
+          "feature": "Bwd Packet Length Std",
+          "model_input_value": 3327.769775390625,
+          "shap_log_odds": 9.373629452818738
+        },
+        {
+          "feature": "Packet Length Std",
+          "model_input_value": 2650.585693359375,
+          "shap_log_odds": 2.0570046379950453
+        },
+        {
+          "feature": "Init_Win_bytes_backward",
+          "model_input_value": 229.0,
+          "shap_log_odds": 2.009413533611632
+        },
+        {
+          "feature": "Destination Port",
+          "model_input_value": 80.0,
+          "shap_log_odds": 0.9030423652838594
+        },
+        {
+          "feature": "Init_Win_bytes_forward",
+          "model_input_value": 8192.0,
+          "shap_log_odds": 0.7313000703011088
+        }
+      ],
+      "top_toward_benign": [
+        {
+          "feature": "Bwd Header Length",
+          "model_input_value": 112.0,
+          "shap_log_odds": -0.2266166470022049
+        },
+        {
+          "feature": "min_seg_size_forward",
+          "model_input_value": 20.0,
+          "shap_log_odds": -0.13336037592400046
+        },
+        {
+          "feature": "Idle Max",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.07144466881932467
+        },
+        {
+          "feature": "act_data_pkt_fwd",
+          "model_input_value": 2.0,
+          "shap_log_odds": -0.03940843174563481
+        },
+        {
+          "feature": "Bwd Packets/s",
+          "model_input_value": 5.081791400909424,
+          "shap_log_odds": -0.035161012835129915
+        }
+      ]
+    },
+    {
+      "category": "true_positive",
+      "score_range_rank": 3,
+      "matrix_row_index_zero_based": 1138403,
+      "source_file": "Wednesday-workingHours.pcap_ISCX.csv",
+      "label": "DoS Hulk",
+      "target": "ATTACK",
+      "prediction": "ATTACK",
+      "attack_score": 0.9999911151468888,
+      "frozen_threshold": 0.9975500791153585,
+      "score_margin": 0.0024410360315302304,
+      "base_log_odds": -6.995060367868704,
+      "output_log_odds": 11.631153743827628,
+      "reconstructed_attack_score": 0.9999911151468888,
+      "reconstruction_absolute_error": 0.0,
+      "top_toward_attack": [
+        {
+          "feature": "Bwd Packet Length Std",
+          "model_input_value": 2179.547119140625,
+          "shap_log_odds": 8.845980678699043
+        },
+        {
+          "feature": "Init_Win_bytes_backward",
+          "model_input_value": 235.0,
+          "shap_log_odds": 2.1235768713107266
+        },
+        {
+          "feature": "Destination Port",
+          "model_input_value": 80.0,
+          "shap_log_odds": 1.3996107785325165
+        },
+        {
+          "feature": "Packet Length Std",
+          "model_input_value": 1753.6026611328125,
+          "shap_log_odds": 1.3513458029805825
+        },
+        {
+          "feature": "Init_Win_bytes_forward",
+          "model_input_value": 0.0,
+          "shap_log_odds": 0.9823307535512836
+        }
+      ],
+      "top_toward_benign": [
+        {
+          "feature": "Bwd Header Length",
+          "model_input_value": 200.0,
+          "shap_log_odds": -0.18129432588265507
+        },
+        {
+          "feature": "min_seg_size_forward",
+          "model_input_value": 20.0,
+          "shap_log_odds": -0.14061975005570182
+        },
+        {
+          "feature": "Total Length of Fwd Packets",
+          "model_input_value": 674.0,
+          "shap_log_odds": -0.11352272412810616
+        },
+        {
+          "feature": "Flow IAT Max",
+          "model_input_value": 81200000.0,
+          "shap_log_odds": -0.049415238250230156
+        },
+        {
+          "feature": "Fwd Packet Length Max",
+          "model_input_value": 334.0,
+          "shap_log_odds": -0.029576141788144505
+        }
+      ]
+    },
+    {
+      "category": "false_positive",
+      "score_range_rank": 1,
+      "matrix_row_index_zero_based": 1522383,
+      "source_file": "Wednesday-workingHours.pcap_ISCX.csv",
+      "label": "BENIGN",
+      "target": "BENIGN",
+      "prediction": "ATTACK",
+      "attack_score": 0.9976152051119854,
+      "frozen_threshold": 0.9975500791153585,
+      "score_margin": 6.512599662689134e-05,
+      "base_log_odds": -6.995060367868704,
+      "output_log_odds": 6.036254516132122,
+      "reconstructed_attack_score": 0.9976152051119854,
+      "reconstruction_absolute_error": 0.0,
+      "top_toward_attack": [
+        {
+          "feature": "Destination Port",
+          "model_input_value": 80.0,
+          "shap_log_odds": 3.051966039992265
+        },
+        {
+          "feature": "Average Packet Size",
+          "model_input_value": 0.0,
+          "shap_log_odds": 1.7685451661186742
+        },
+        {
+          "feature": "min_seg_size_forward",
+          "model_input_value": 40.0,
+          "shap_log_odds": 1.5584158999855091
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "model_input_value": 0.0,
+          "shap_log_odds": 1.343239517014136
+        },
+        {
+          "feature": "Bwd Header Length",
+          "model_input_value": 0.0,
+          "shap_log_odds": 0.8266405439109297
+        }
+      ],
+      "top_toward_benign": [
+        {
+          "feature": "Bwd Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.48875421560762106
+        },
+        {
+          "feature": "Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.2281890850637027
+        },
+        {
+          "feature": "Flow IAT Min",
+          "model_input_value": 998511.0,
+          "shap_log_odds": -0.15650215715127377
+        },
+        {
+          "feature": "Flow Duration",
+          "model_input_value": 63142008.0,
+          "shap_log_odds": -0.08407396161430528
+        },
+        {
+          "feature": "Active Max",
+          "model_input_value": 7014465.0,
+          "shap_log_odds": -0.08386617709670291
+        }
+      ]
+    },
+    {
+      "category": "false_positive",
+      "score_range_rank": 2,
+      "matrix_row_index_zero_based": 777219,
+      "source_file": "Tuesday-WorkingHours.pcap_ISCX.csv",
+      "label": "BENIGN",
+      "target": "BENIGN",
+      "prediction": "ATTACK",
+      "attack_score": 0.9977807526712466,
+      "frozen_threshold": 0.9975500791153585,
+      "score_margin": 0.00023067355588801686,
+      "base_log_odds": -6.995060367868704,
+      "output_log_odds": 6.108365468179943,
+      "reconstructed_attack_score": 0.9977807526712466,
+      "reconstruction_absolute_error": 0.0,
+      "top_toward_attack": [
+        {
+          "feature": "Destination Port",
+          "model_input_value": 80.0,
+          "shap_log_odds": 3.0516466082954676
+        },
+        {
+          "feature": "Average Packet Size",
+          "model_input_value": 0.0,
+          "shap_log_odds": 1.7685451661186742
+        },
+        {
+          "feature": "min_seg_size_forward",
+          "model_input_value": 40.0,
+          "shap_log_odds": 1.568392024936797
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "model_input_value": 0.0,
+          "shap_log_odds": 1.343239517014136
+        },
+        {
+          "feature": "Bwd Header Length",
+          "model_input_value": 0.0,
+          "shap_log_odds": 0.8266405439109297
+        }
+      ],
+      "top_toward_benign": [
+        {
+          "feature": "Bwd Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.48875421560762106
+        },
+        {
+          "feature": "Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.22621416497590838
+        },
+        {
+          "feature": "Flow IAT Min",
+          "model_input_value": 998234.0,
+          "shap_log_odds": -0.15284228163509805
+        },
+        {
+          "feature": "Flow Duration",
+          "model_input_value": 63101728.0,
+          "shap_log_odds": -0.08430064966579899
+        },
+        {
+          "feature": "Fwd Packet Length Mean",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.052876650636174395
+        }
+      ]
+    },
+    {
+      "category": "false_positive",
+      "score_range_rank": 3,
+      "matrix_row_index_zero_based": 2078424,
+      "source_file": "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+      "label": "BENIGN",
+      "target": "BENIGN",
+      "prediction": "ATTACK",
+      "attack_score": 0.9988837954993892,
+      "frozen_threshold": 0.9975500791153585,
+      "score_margin": 0.001333716384030681,
+      "base_log_odds": -6.995060367868704,
+      "output_log_odds": 6.796704359614531,
+      "reconstructed_attack_score": 0.9988837954993892,
+      "reconstruction_absolute_error": 0.0,
+      "top_toward_attack": [
+        {
+          "feature": "Destination Port",
+          "model_input_value": 80.0,
+          "shap_log_odds": 2.7676355216407695
+        },
+        {
+          "feature": "Fwd IAT Min",
+          "model_input_value": 733.0,
+          "shap_log_odds": 2.568917245699456
+        },
+        {
+          "feature": "Init_Win_bytes_forward",
+          "model_input_value": 29200.0,
+          "shap_log_odds": 1.6466512449604447
+        },
+        {
+          "feature": "Average Packet Size",
+          "model_input_value": 0.0,
+          "shap_log_odds": 1.2410707580921063
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "model_input_value": 0.0,
+          "shap_log_odds": 0.9296454295048827
+        }
+      ],
+      "top_toward_benign": [
+        {
+          "feature": "Bwd Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.4453122575956596
+        },
+        {
+          "feature": "Bwd Header Length",
+          "model_input_value": 40.0,
+          "shap_log_odds": -0.4329968767728311
+        },
+        {
+          "feature": "Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.2370365014971659
+        },
+        {
+          "feature": "Max Packet Length",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.16034212006507612
+        },
+        {
+          "feature": "Idle Max",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.09470467532482635
+        }
+      ]
+    },
+    {
+      "category": "false_negative",
+      "score_range_rank": 1,
+      "matrix_row_index_zero_based": 2283575,
+      "source_file": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "label": "PortScan",
+      "target": "ATTACK",
+      "prediction": "BENIGN",
+      "attack_score": 8.30496751393165e-06,
+      "frozen_threshold": 0.9975500791153585,
+      "score_margin": -0.9975417741478446,
+      "base_log_odds": -6.995060367868704,
+      "output_log_odds": -11.698648421532397,
+      "reconstructed_attack_score": 8.304967513931693e-06,
+      "reconstruction_absolute_error": 4.404571325722362e-20,
+      "top_toward_attack": [
+        {
+          "feature": "Max Packet Length",
+          "model_input_value": 48.0,
+          "shap_log_odds": 0.09655367326537428
+        },
+        {
+          "feature": "min_seg_size_forward",
+          "model_input_value": 32.0,
+          "shap_log_odds": 0.04244437217055679
+        },
+        {
+          "feature": "Fwd IAT Min",
+          "model_input_value": 0.0,
+          "shap_log_odds": 0.03767428934482114
+        },
+        {
+          "feature": "Active Min",
+          "model_input_value": 0.0,
+          "shap_log_odds": 0.028359875865591876
+        },
+        {
+          "feature": "Bwd Packets/s",
+          "model_input_value": 6211.18017578125,
+          "shap_log_odds": 0.025776163810923524
+        }
+      ],
+      "top_toward_benign": [
+        {
+          "feature": "Init_Win_bytes_forward",
+          "model_input_value": -1.0,
+          "shap_log_odds": -1.2869575724261917
+        },
+        {
+          "feature": "Bwd Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.6756791401041786
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "model_input_value": 48.0,
+          "shap_log_odds": -0.5902517192588649
+        },
+        {
+          "feature": "Bwd Packet Length Min",
+          "model_input_value": 48.0,
+          "shap_log_odds": -0.5574454354178436
+        },
+        {
+          "feature": "Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.30364269167003927
+        }
+      ]
+    },
+    {
+      "category": "false_negative",
+      "score_range_rank": 2,
+      "matrix_row_index_zero_based": 2213768,
+      "source_file": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "label": "PortScan",
+      "target": "ATTACK",
+      "prediction": "BENIGN",
+      "attack_score": 0.995952360488867,
+      "frozen_threshold": 0.9975500791153585,
+      "score_margin": -0.0015977186264914955,
+      "base_log_odds": -6.995060367868704,
+      "output_log_odds": 5.505565551160422,
+      "reconstructed_attack_score": 0.995952360488867,
+      "reconstruction_absolute_error": 0.0,
+      "top_toward_attack": [
+        {
+          "feature": "Average Packet Size",
+          "model_input_value": 5.0,
+          "shap_log_odds": 2.869118560067046
+        },
+        {
+          "feature": "Bwd Header Length",
+          "model_input_value": 20.0,
+          "shap_log_odds": 1.6220836504286538
+        },
+        {
+          "feature": "Init_Win_bytes_forward",
+          "model_input_value": 1024.0,
+          "shap_log_odds": 1.479289933975501
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "model_input_value": 6.0,
+          "shap_log_odds": 1.4083687442124981
+        },
+        {
+          "feature": "Max Packet Length",
+          "model_input_value": 6.0,
+          "shap_log_odds": 1.1838047955405366
+        }
+      ],
+      "top_toward_benign": [
+        {
+          "feature": "Destination Port",
+          "model_input_value": 8093.0,
+          "shap_log_odds": -0.21543585403476875
+        },
+        {
+          "feature": "Bwd Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.19630442441099094
+        },
+        {
+          "feature": "Fwd Packets/s",
+          "model_input_value": 333333.34375,
+          "shap_log_odds": -0.12726843850483668
+        },
+        {
+          "feature": "Idle Max",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.10180293124820483
+        },
+        {
+          "feature": "Flow IAT Mean",
+          "model_input_value": 3.0,
+          "shap_log_odds": -0.08994035845050433
+        }
+      ]
+    },
+    {
+      "category": "false_negative",
+      "score_range_rank": 3,
+      "matrix_row_index_zero_based": 2297858,
+      "source_file": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "label": "PortScan",
+      "target": "ATTACK",
+      "prediction": "BENIGN",
+      "attack_score": 0.9975498450712839,
+      "frozen_threshold": 0.9975500791153585,
+      "score_margin": -2.3404407467619848e-07,
+      "base_log_odds": -6.995060367868704,
+      "output_log_odds": 6.009150858743895,
+      "reconstructed_attack_score": 0.9975498450712839,
+      "reconstruction_absolute_error": 0.0,
+      "top_toward_attack": [
+        {
+          "feature": "Average Packet Size",
+          "model_input_value": 5.0,
+          "shap_log_odds": 2.9462061979687895
+        },
+        {
+          "feature": "Bwd Header Length",
+          "model_input_value": 20.0,
+          "shap_log_odds": 1.6795017656714737
+        },
+        {
+          "feature": "Init_Win_bytes_forward",
+          "model_input_value": 1024.0,
+          "shap_log_odds": 1.5355801714560802
+        },
+        {
+          "feature": "Bwd Packet Length Mean",
+          "model_input_value": 6.0,
+          "shap_log_odds": 1.4369216166511305
+        },
+        {
+          "feature": "Max Packet Length",
+          "model_input_value": 6.0,
+          "shap_log_odds": 1.2177772510808926
+        }
+      ],
+      "top_toward_benign": [
+        {
+          "feature": "Bwd Packet Length Std",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.18309539241144646
+        },
+        {
+          "feature": "Idle Max",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.09901831605256393
+        },
+        {
+          "feature": "Fwd IAT Mean",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.05075310175013201
+        },
+        {
+          "feature": "Fwd IAT Max",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.039124297924533015
+        },
+        {
+          "feature": "Idle Min",
+          "model_input_value": 0.0,
+          "shap_log_odds": -0.0349943137836741
+        }
+      ]
+    }
+  ]
+}

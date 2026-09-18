@@ -18,6 +18,8 @@ reports/ai-09-error-analysis.json
 reports/ai-09-error-analysis.md
 reports/ai-10-local-demo.md
 reports/ai-11-release.md
+reports/ai-15-individual-shap.json
+reports/ai-15-individual-shap.md
 reports/data-profile.json
 reports/data-profile.md
 reports/data-quality-audit.json
@@ -35,6 +37,7 @@ scripts/audit_feature_leakage.py
 scripts/build_model_matrix.py
 scripts/build_release.py
 scripts/build_splits.py
+scripts/explain_individual_predictions.py
 scripts/hash_dataset.py
 scripts/inference.py
 scripts/model_data.py
@@ -48,6 +51,7 @@ tests/test_audit_feature_leakage.py
 tests/test_build_model_matrix.py
 tests/test_build_release.py
 tests/test_build_splits.py
+tests/test_explain_individual_predictions.py
 tests/test_inference.py
 tests/test_model_data.py
 tests/test_preprocessing.py

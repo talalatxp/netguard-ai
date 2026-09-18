@@ -89,6 +89,13 @@ temporal tree models. This is consistent with reliance on service or scenario
 signatures that change across days and families. The analysis is correlational,
 and no test-driven threshold or feature revision is made.
 
+Individual SHAP explanations for random HGB cover the minimum, median, and
+maximum scores among true positives, false positives, and false negatives. The
+three selected benign errors are pushed toward attack by a port-80, low-payload
+signature. All three selected misses are PortScan; two contain strong attack
+evidence but remain just below the frozen threshold. SHAP additivity is verified
+against the model score and is not interpreted causally.
+
 ## Demonstration
 
 The local Streamlit application loads one of six frozen learned configurations,
@@ -122,7 +129,7 @@ data, not adjustment against the frozen Friday test.
 
 ## Reproducibility
 
-Release `0.1.0` includes the source, tests, reports, model card, exact dependency
+Release `0.2.0` includes the source, tests, reports, model card, exact dependency
 versions, and a machine-readable integrity manifest. Raw data and model binaries
 remain external; their required SHA-256 values are included in that manifest.
 The deterministic source ZIP can be rebuilt with `scripts/build_release.py`.

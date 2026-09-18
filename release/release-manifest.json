@@ -2,7 +2,7 @@
   "schema_version": 1,
   "release": {
     "name": "NetGuard AI",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "kind": "research prototype",
     "license": "not declared"
   },
@@ -186,18 +186,18 @@
     },
     {
       "path": "MODEL_CARD.md",
-      "size_bytes": 5623,
-      "sha256": "b7a909d76751922b5b963fe711ed4dece38bee5d78e776563c48622ecbc57101"
+      "size_bytes": 6069,
+      "sha256": "7897b720291428251863f420f25bb4809a599c5d9be88e2b524e01c3cfbd76b9"
     },
     {
       "path": "README.md",
-      "size_bytes": 14640,
-      "sha256": "a68e1e752bf31fec11850e61cf04b54f47ad1e476d12ffe4cc8fc96486d01e56"
+      "size_bytes": 15382,
+      "sha256": "1770c48e9ced65e32859cb569bdf5af958fe6c6c2adf5398788d01e71e9b747e"
     },
     {
       "path": "VERSION",
       "size_bytes": 6,
-      "sha256": "e9dd8507f4bf0c6f42458e41aea833ad0bd3f6127272335eee9bf4d58541ed67"
+      "sha256": "1f930dd1f133c1f97a94fe3acb8db34372cf4c01ffdb2b3ff4ca72f9494121e9"
     },
     {
       "path": "app.py",
@@ -216,13 +216,13 @@
     },
     {
       "path": "release/RELEASE_NOTES.md",
-      "size_bytes": 1163,
-      "sha256": "0e7fcbedad5fbf1a3c83956cd32fcc306048faf1d5fe2d54c2c88e52f7c030cc"
+      "size_bytes": 1249,
+      "sha256": "102aac96ce686fb7f913b8652cdceedf90eba126e2408405399d9a9a905b1250"
     },
     {
       "path": "release/release-files.txt",
-      "size_bytes": 1439,
-      "sha256": "0a49bfa9fa71f128f810ce30ce4db7149a5600f79980732e1bfb19ccdf211898"
+      "size_bytes": 1594,
+      "sha256": "f694ce6d27493c0e83025bfd9e13319d2dc3ce074ea727ed2807c262c2f3c27f"
     },
     {
       "path": "reports/ai-07-baseline-results.json",
@@ -271,8 +271,18 @@
     },
     {
       "path": "reports/ai-11-release.md",
-      "size_bytes": 2632,
-      "sha256": "69cc68236bd64657ebb4f0a134ec98089d2a1ab7a9feddd210725ce00bd19e2a"
+      "size_bytes": 2707,
+      "sha256": "62ce4c516dc6e5058a9480bf73315e568b2f4d8d8324504b89181f986e83c919"
+    },
+    {
+      "path": "reports/ai-15-individual-shap.json",
+      "size_bytes": 24148,
+      "sha256": "5e3ad780ae5a1694184068efdeef823532320c9d4602798baf5b7f3e65504960"
+    },
+    {
+      "path": "reports/ai-15-individual-shap.md",
+      "size_bytes": 5808,
+      "sha256": "adfeda960b6d8de32ff033817b137f46648eb65fa7d7983da1d9782b790b7b59"
     },
     {
       "path": "reports/data-profile.json",
@@ -306,8 +316,8 @@
     },
     {
       "path": "reports/final-report.md",
-      "size_bytes": 6111,
-      "sha256": "0668003dbc4b31c48be4cd3419a923e63c6b1d830491319b19bbde1b7d3f5913"
+      "size_bytes": 6561,
+      "sha256": "58bb09bf17d369ad3ccd0c3a200539aafa08f4476b82353dc9219cc000817563"
     },
     {
       "path": "reports/split-design.md",
@@ -326,8 +336,8 @@
     },
     {
       "path": "requirements.txt",
-      "size_bytes": 79,
-      "sha256": "2d227fa21f0b04850f0a61043e63da53cfc179860e9adac6a0d90bc15380f31f"
+      "size_bytes": 92,
+      "sha256": "0404f79a26e2485f2144befa9274655faf9039fd37228886dc7c01bf6812b5c9"
     },
     {
       "path": "scripts/analyze_errors.py",
@@ -358,6 +368,11 @@
       "path": "scripts/build_splits.py",
       "size_bytes": 22055,
       "sha256": "4ff00eb03e333ee5e73fe3c2916cb25cbc20d4046106092f3701e70d02fc5c19"
+    },
+    {
+      "path": "scripts/explain_individual_predictions.py",
+      "size_bytes": 11419,
+      "sha256": "92aca8f20d14e6074af966d5763568ff4ea10728cf1ccc9323c6cef75899a364"
     },
     {
       "path": "scripts/hash_dataset.py",
@@ -417,12 +432,17 @@
     {
       "path": "tests/test_build_release.py",
       "size_bytes": 2477,
-      "sha256": "6bab5eb2de5b21437fb3480ff4e3aa88a0581886651da2bb3dc9e5942e229f54"
+      "sha256": "702794aca6d7e2db69ea6e09a90ada47aee7ee136d4d3952ce56dc1634d780d1"
     },
     {
       "path": "tests/test_build_splits.py",
       "size_bytes": 9387,
       "sha256": "fe80fe02d66a2c0c525cf55b54dc7530a7c421a62365a20c4f6bd977343b1e0e"
+    },
+    {
+      "path": "tests/test_explain_individual_predictions.py",
+      "size_bytes": 3283,
+      "sha256": "47709c1dd377baf69011680f71c6e410f8c60ca12995562aa9863f28b923918e"
     },
     {
       "path": "tests/test_inference.py",

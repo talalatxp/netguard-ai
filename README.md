@@ -5,9 +5,9 @@ built on labelled flow data from CIC-IDS2017. It classifies each network flow as
 `BENIGN` or `ATTACK` and studies how evaluation methodology changes the apparent
 ability of a supervised model to generalize.
 
-> **Release:** `0.1.0`. Dataset provenance, quality auditing, leakage-controlled
+> **Release:** `0.2.0`. Dataset provenance, quality auditing, leakage-controlled
 > splits, frozen model comparison, error analysis, model card, local explanatory
-> demo, and reproducible source release are complete.
+> demo, individual SHAP explanations, and reproducible source release are complete.
 
 ## Research question
 
@@ -154,6 +154,8 @@ netguard-ai/
 │   ├── ai-09-error-analysis.md
 │   ├── ai-10-local-demo.md
 │   ├── ai-11-release.md
+│   ├── ai-15-individual-shap.json
+│   ├── ai-15-individual-shap.md
 │   ├── final-report.md
 │   ├── split-design.md
 │   ├── split-summary.json
@@ -169,6 +171,7 @@ netguard-ai/
     ├── build_model_matrix.py
     ├── build_release.py
     ├── build_splits.py
+    ├── explain_individual_predictions.py
     ├── hash_dataset.py
     ├── inference.py
     ├── model_data.py
@@ -273,6 +276,17 @@ shift, attack-family coverage, source-file errors, and validation-only
 permutation importance. Post-test findings are descriptive and cannot be used
 to revise the reported test result.
 
+Reproduce the AI-15 individual HGB explanations into an ignored output:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/explain_individual_predictions.py --output data/processed/reproduction-ai15.json
+```
+
+The [AI-15 SHAP report](reports/ai-15-individual-shap.md) explains three true
+positives, three false positives, and three false negatives selected
+deterministically across each category's score range. SHAP contributions are
+verified against the frozen model score and are not interpreted as causal.
+
 Run the AI-10 local explanatory demo after reproducing the ignored AI-07 and
 AI-08 model artifacts:
 
@@ -286,7 +300,7 @@ threshold, and provides downloadable decisions. The
 [AI-10 demo report](reports/ai-10-local-demo.md) records the input contract,
 safety boundaries, verification, and limitations.
 
-## Reproduce release 0.1.0
+## Reproduce release 0.2.0
 
 The [model card](MODEL_CARD.md) defines intended use, metrics, known failures,
 and ethical limitations. The [final report](reports/final-report.md) presents the
@@ -310,7 +324,7 @@ Rebuild the deterministic source ZIP and checksum file:
 .\.venv\Scripts\python.exe scripts/build_release.py build --require-models
 ```
 
-This creates `dist/netguard-ai-0.1.0-source.zip` and `dist/SHA256SUMS`. Raw data
+This creates `dist/netguard-ai-0.2.0-source.zip` and `dist/SHA256SUMS`. Raw data
 and model binaries are not placed in the ZIP. No software or model license has
 been declared; the release metadata does not grant reuse rights.
 
@@ -328,6 +342,7 @@ Any checksum mismatch must be investigated before the affected file is used.
 - [x] Build the preprocessing pipeline and learned baseline.
 - [x] Compare Random Forest and gradient boosting.
 - [x] Analyze errors, attack coverage, and feature importance.
+- [x] Explain individual correct and incorrect HGB decisions with SHAP.
 - [x] Build and test the local inference demo.
 - [x] Publish the final report, model card, and reproducible release.
 

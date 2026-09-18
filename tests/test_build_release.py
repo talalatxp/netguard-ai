@@ -45,8 +45,8 @@ class ReleasePathTests(unittest.TestCase):
             first = root / "first.zip"
             second = root / "second.zip"
 
-            write_deterministic_bundle(root, ("a.txt",), manifest, first, "0.1.0")
-            write_deterministic_bundle(root, ("a.txt",), manifest, second, "0.1.0")
+            write_deterministic_bundle(root, ("a.txt",), manifest, first, "0.2.0")
+            write_deterministic_bundle(root, ("a.txt",), manifest, second, "0.2.0")
 
             self.assertEqual(file_sha256(first), file_sha256(second))
 
@@ -59,7 +59,7 @@ class CommittedReleaseTests(unittest.TestCase):
         actual = (ROOT / "release" / "release-manifest.json").read_bytes()
 
         self.assertEqual(actual, manifest_bytes(expected))
-        self.assertEqual(expected["release"]["version"], "0.1.0")
+        self.assertEqual(expected["release"]["version"], "0.2.0")
         self.assertEqual(len(expected["external_model_artifacts"]), 6)
 
 

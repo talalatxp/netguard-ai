@@ -3,7 +3,7 @@
 ## Model details
 
 - **Name:** NetGuard AI
-- **Version:** 0.1.0
+- **Version:** 0.2.0
 - **Released:** 2026-09-18
 - **Type:** binary network-flow classifiers
 - **Framework:** scikit-learn 1.9.1
@@ -103,6 +103,13 @@ Port dominates temporal importance for both tree models. This supports a
 scenario-signature hypothesis but does not establish causality. Correlated
 features can share or conceal importance, and global importance does not explain
 an individual prediction.
+
+AI-15 uses SHAP `TreeExplainer` to inspect three true positives, three false
+positives, and three false negatives from the random HGB test result. SHAP values
+reconstruct raw log-odds exactly and are reported as model behavior, not causal
+effects. The selected false positives emphasize a port-80, low-payload signature;
+all three selected false negatives are PortScan flows, including two immediately
+below the unusually high frozen threshold.
 
 ## Ethical and security considerations
 

@@ -2,7 +2,8 @@
 
 ## Scope
 
-AI-11 closes the planned NetGuard AI research project as release `0.1.0`. It
+AI-11 closes the planned NetGuard AI research project. The current `0.2.0`
+release additionally includes the later AI-15 individual explanations. AI-11
 publishes the consolidated research report, model card, release notes, and a
 machine-readable integrity manifest. It also provides a deterministic source-ZIP
 builder and tests that fail when a listed source file, model artifact, frozen
