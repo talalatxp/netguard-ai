@@ -1,0 +1,238 @@
+{
+  "generated_at_utc": "2026-09-14T13:14:40.123763+00:00",
+  "method": {
+    "feature_fingerprint": "SHA-256 of JSON-serialized CSV cell strings",
+    "excluded_columns": [
+      "Label",
+      "second Fwd Header Length"
+    ],
+    "comparison": "exact feature-cell strings; not near-duplicate or numeric equivalence",
+    "line_numbers": "one-based physical CSV lines, including the header",
+    "cross_file": "different CSV files; no temporal order is inferred"
+  },
+  "file_count": 8,
+  "total_rows": 2830743,
+  "repeated_feature_groups": 95479,
+  "repeated_feature_rows": 404558,
+  "same_label_groups": 94781,
+  "same_label_rows": 397538,
+  "conflicting_label_groups": 698,
+  "conflicting_label_rows": 7020,
+  "cross_file_groups": 34208,
+  "examples": {
+    "same_label": [
+      {
+        "feature_hash": "000001e0089ed1754530d9a3fae7bf74d86a983ae2ff8fd92f5f8697b84b78e5",
+        "row_count": 4,
+        "label_counts": {
+          "BENIGN": 4
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Morning.pcap_ISCX.csv",
+            "line": 69292
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Morning.pcap_ISCX.csv",
+            "line": 81784
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Tuesday-WorkingHours.pcap_ISCX.csv",
+            "line": 290140
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Wednesday-workingHours.pcap_ISCX.csv",
+            "line": 611590
+          }
+        ],
+        "cross_file": true
+      },
+      {
+        "feature_hash": "0000a1c18ae5b4547d22fa9c7a7bbefc77afc7c2bdd34ede84cf9fc132a799b2",
+        "row_count": 2,
+        "label_counts": {
+          "PortScan": 2
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 153037
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 190455
+          }
+        ],
+        "cross_file": false
+      },
+      {
+        "feature_hash": "0001f5d69fd345b157bf2aaf87644ea423b9258877782f1003654efebbf04245",
+        "row_count": 2,
+        "label_counts": {
+          "PortScan": 2
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 159927
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 160911
+          }
+        ],
+        "cross_file": false
+      },
+      {
+        "feature_hash": "00026edc30d32cb03dca1f2ee82beaada359de367cd4f3dabfb37f8c3f3521fe",
+        "row_count": 2,
+        "label_counts": {
+          "PortScan": 2
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 91244
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 121127
+          }
+        ],
+        "cross_file": false
+      },
+      {
+        "feature_hash": "00029d34c7ebc91034ba726ba16f977943ba0ce3dd482dba2c2de40587aebcd2",
+        "row_count": 2,
+        "label_counts": {
+          "BENIGN": 2
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Wednesday-workingHours.pcap_ISCX.csv",
+            "line": 560519
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Wednesday-workingHours.pcap_ISCX.csv",
+            "line": 571995
+          }
+        ],
+        "cross_file": false
+      }
+    ],
+    "conflicting_labels": [
+      {
+        "feature_hash": "004f49cece0aaf26ed69e49b8a1656624dc1a79c6324611c5774473b89991d70",
+        "row_count": 2,
+        "label_counts": {
+          "BENIGN": 1,
+          "PortScan": 1
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 100863
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+            "line": 50313
+          }
+        ],
+        "cross_file": true
+      },
+      {
+        "feature_hash": "00722b70a964b4fc3f685050ac2113ffe707148f7ba3723b6ee94c1cf70a78da",
+        "row_count": 2,
+        "label_counts": {
+          "BENIGN": 1,
+          "PortScan": 1
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 117979
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+            "line": 50338
+          }
+        ],
+        "cross_file": true
+      },
+      {
+        "feature_hash": "0084ce01bd75ea2be8f02a82195b70fc2a57139b57d9f6de676be8c2c4805603",
+        "row_count": 3,
+        "label_counts": {
+          "BENIGN": 1,
+          "PortScan": 2
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 128334
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 274269
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+            "line": 50552
+          }
+        ],
+        "cross_file": true
+      },
+      {
+        "feature_hash": "008ddae0987700d2e5926c3915fa4c736c89e1fe7ebd3835dabbf4709116bd24",
+        "row_count": 2,
+        "label_counts": {
+          "BENIGN": 1,
+          "PortScan": 1
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 132407
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+            "line": 51249
+          }
+        ],
+        "cross_file": true
+      },
+      {
+        "feature_hash": "01ff2c89300cfd7aec5b544f430dd8213ae2fc692fdfdbe9e0c5aebf3961b84e",
+        "row_count": 5,
+        "label_counts": {
+          "BENIGN": 1,
+          "PortScan": 4
+        },
+        "locations": [
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 88273
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 95883
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 116297
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+            "line": 252673
+          },
+          {
+            "file": "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+            "line": 50353
+          }
+        ],
+        "cross_file": true
+      }
+    ]
+  },
+  "groups_output": "reports/feature-leakage-groups.jsonl"
+}

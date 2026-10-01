@@ -1,0 +1,209 @@
+{
+  "generated_at_utc": "2026-09-08T15:02:57.753861+00:00",
+  "file_count": 8,
+  "total_rows": 2830743,
+  "schemas_are_identical": true,
+  "column_count": 79,
+  "columns": [
+    " Destination Port",
+    " Flow Duration",
+    " Total Fwd Packets",
+    " Total Backward Packets",
+    "Total Length of Fwd Packets",
+    " Total Length of Bwd Packets",
+    " Fwd Packet Length Max",
+    " Fwd Packet Length Min",
+    " Fwd Packet Length Mean",
+    " Fwd Packet Length Std",
+    "Bwd Packet Length Max",
+    " Bwd Packet Length Min",
+    " Bwd Packet Length Mean",
+    " Bwd Packet Length Std",
+    "Flow Bytes/s",
+    " Flow Packets/s",
+    " Flow IAT Mean",
+    " Flow IAT Std",
+    " Flow IAT Max",
+    " Flow IAT Min",
+    "Fwd IAT Total",
+    " Fwd IAT Mean",
+    " Fwd IAT Std",
+    " Fwd IAT Max",
+    " Fwd IAT Min",
+    "Bwd IAT Total",
+    " Bwd IAT Mean",
+    " Bwd IAT Std",
+    " Bwd IAT Max",
+    " Bwd IAT Min",
+    "Fwd PSH Flags",
+    " Bwd PSH Flags",
+    " Fwd URG Flags",
+    " Bwd URG Flags",
+    " Fwd Header Length",
+    " Bwd Header Length",
+    "Fwd Packets/s",
+    " Bwd Packets/s",
+    " Min Packet Length",
+    " Max Packet Length",
+    " Packet Length Mean",
+    " Packet Length Std",
+    " Packet Length Variance",
+    "FIN Flag Count",
+    " SYN Flag Count",
+    " RST Flag Count",
+    " PSH Flag Count",
+    " ACK Flag Count",
+    " URG Flag Count",
+    " CWE Flag Count",
+    " ECE Flag Count",
+    " Down/Up Ratio",
+    " Average Packet Size",
+    " Avg Fwd Segment Size",
+    " Avg Bwd Segment Size",
+    " Fwd Header Length",
+    "Fwd Avg Bytes/Bulk",
+    " Fwd Avg Packets/Bulk",
+    " Fwd Avg Bulk Rate",
+    " Bwd Avg Bytes/Bulk",
+    " Bwd Avg Packets/Bulk",
+    "Bwd Avg Bulk Rate",
+    "Subflow Fwd Packets",
+    " Subflow Fwd Bytes",
+    " Subflow Bwd Packets",
+    " Subflow Bwd Bytes",
+    "Init_Win_bytes_forward",
+    " Init_Win_bytes_backward",
+    " act_data_pkt_fwd",
+    " min_seg_size_forward",
+    "Active Mean",
+    " Active Std",
+    " Active Max",
+    " Active Min",
+    "Idle Mean",
+    " Idle Std",
+    " Idle Max",
+    " Idle Min",
+    " Label"
+  ],
+  "labels": {
+    "BENIGN": 2273097,
+    "Bot": 1966,
+    "DDoS": 128027,
+    "DoS GoldenEye": 10293,
+    "DoS Hulk": 231073,
+    "DoS Slowhttptest": 5499,
+    "DoS slowloris": 5796,
+    "FTP-Patator": 7938,
+    "Heartbleed": 11,
+    "Infiltration": 36,
+    "PortScan": 158930,
+    "SSH-Patator": 5897,
+    "Web Attack � Brute Force": 1507,
+    "Web Attack � Sql Injection": 21,
+    "Web Attack � XSS": 652
+  },
+  "files": [
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+      "size_bytes": 77123859,
+      "row_count": 225745,
+      "column_count": 79,
+      "malformed_row_count": 0,
+      "labels": {
+        "BENIGN": 97718,
+        "DDoS": 128027
+      },
+      "schema_matches_reference": true
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "size_bytes": 76906168,
+      "row_count": 286467,
+      "column_count": 79,
+      "malformed_row_count": 0,
+      "labels": {
+        "BENIGN": 127537,
+        "PortScan": 158930
+      },
+      "schema_matches_reference": true
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Friday-WorkingHours-Morning.pcap_ISCX.csv",
+      "size_bytes": 58316725,
+      "row_count": 191033,
+      "column_count": 79,
+      "malformed_row_count": 0,
+      "labels": {
+        "BENIGN": 189067,
+        "Bot": 1966
+      },
+      "schema_matches_reference": true
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Monday-WorkingHours.pcap_ISCX.csv",
+      "size_bytes": 176927918,
+      "row_count": 529918,
+      "column_count": 79,
+      "malformed_row_count": 0,
+      "labels": {
+        "BENIGN": 529918
+      },
+      "schema_matches_reference": true
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+      "size_bytes": 83102436,
+      "row_count": 288602,
+      "column_count": 79,
+      "malformed_row_count": 0,
+      "labels": {
+        "BENIGN": 288566,
+        "Infiltration": 36
+      },
+      "schema_matches_reference": true
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+      "size_bytes": 52023263,
+      "row_count": 170366,
+      "column_count": 79,
+      "malformed_row_count": 0,
+      "labels": {
+        "BENIGN": 168186,
+        "Web Attack � Brute Force": 1507,
+        "Web Attack � Sql Injection": 21,
+        "Web Attack � XSS": 652
+      },
+      "schema_matches_reference": true
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Tuesday-WorkingHours.pcap_ISCX.csv",
+      "size_bytes": 135078995,
+      "row_count": 445909,
+      "column_count": 79,
+      "malformed_row_count": 0,
+      "labels": {
+        "BENIGN": 432074,
+        "FTP-Patator": 7938,
+        "SSH-Patator": 5897
+      },
+      "schema_matches_reference": true
+    },
+    {
+      "path": "data/raw/MachineLearningCSV/MachineLearningCVE/Wednesday-workingHours.pcap_ISCX.csv",
+      "size_bytes": 225166395,
+      "row_count": 692703,
+      "column_count": 79,
+      "malformed_row_count": 0,
+      "labels": {
+        "BENIGN": 440031,
+        "DoS GoldenEye": 10293,
+        "DoS Hulk": 231073,
+        "DoS Slowhttptest": 5499,
+        "DoS slowloris": 5796,
+        "Heartbleed": 11
+      },
+      "schema_matches_reference": true
+    }
+  ]
+}

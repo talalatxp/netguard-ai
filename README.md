@@ -1,0 +1,420 @@
+# NetGuard AI
+
+NetGuard AI is an experimental, explainable network-intrusion detection project
+built on labelled flow data from CIC-IDS2017. It classifies each network flow as
+`BENIGN` or `ATTACK` and studies how evaluation methodology changes the apparent
+ability of a supervised model to generalize.
+
+> **Release:** `0.2.0`. Dataset provenance, quality auditing, leakage-controlled
+> splits, frozen model comparison, error analysis, model card, local explanatory
+> demo, individual SHAP explanations, and reproducible source release are complete.
+
+## Author
+
+Designed, implemented, evaluated, and documented by
+[Talania Teixeiro Perez](https://github.com/talalatxp) as an independent
+machine-learning portfolio project.
+
+## Research question
+
+How much does a supervised classifier's ability to detect malicious traffic
+degrade when moving from a group-aware random split to a strict day-based
+temporal evaluation, and can it maintain a useful false-positive rate on later
+traffic?
+
+The product objective and the experimental question are deliberately separate:
+
+- **Product objective:** detect `ATTACK` flows while controlling false alarms.
+- **Experimental question:** measure whether random-split results overestimate
+  generalization to traffic observed later in time.
+
+## Why this project
+
+Very high intrusion-detection scores can be misleading when duplicated or highly
+similar flows from the same scenario appear in both training and test data. This
+project prioritizes reproducibility, leakage prevention, temporal evaluation,
+error analysis, and honest limitations over reporting accuracy alone.
+
+## Verified dataset snapshot
+
+The project uses the official `MachineLearningCSV.zip` distribution published by
+the Canadian Institute for Cybersecurity at the University of New Brunswick.
+Raw data is stored locally under `data/raw/` and is never committed to Git.
+
+| Property | Verified value |
+| --- | ---: |
+| CSV files | 8 |
+| Rows | 2,830,743 |
+| Columns | 79 |
+| `BENIGN` flows | 2,273,097 |
+| Attack flows | 557,646 |
+| Raw attack labels | 14 |
+| Structurally malformed rows | 0 |
+| Identical schema across files | Yes |
+
+Two rare labels require particular care when defining evaluation partitions:
+`Heartbleed` has 11 rows and `Infiltration` has 36. The three `Web Attack`
+labels also contain a replacement character in the official CSV data. These
+issues are recorded as data-quality findings and will be normalized explicitly
+without modifying the raw files.
+
+See [the data documentation](data/README.md), the committed
+[SHA-256 inventory](data/checksums.json), the written
+[profile interpretation](reports/data-profile.md), and the generated
+[data profile](reports/data-profile.json) for exact provenance and counts. The
+[data-quality audit](reports/data-quality-audit.md) documents types, non-finite
+values, exact duplicates, and the proposed cleaning policy.
+
+## Experimental design
+
+### Task
+
+- Primary task: binary classification, `BENIGN` versus `ATTACK`.
+- Secondary analysis: metrics grouped by each original attack label.
+- Full multiclass attack classification is outside the initial scope.
+
+### Evaluation A: random reference
+
+- Fixed random seed `42`, targeting 70% train, 15% validation, and 15% test.
+- Group-aware train, validation, and test partitions by exact feature hash;
+  check class balance because mixed-label groups limit strict stratification.
+- Included as a reference comparable with common introductory approaches.
+- Not treated as sufficient evidence of temporal generalization.
+
+### Evaluation B: temporal
+
+- Chronological `train -> validation -> test` ordering.
+- Frozen days: Monday–Wednesday train, Thursday validation, Friday test.
+- Primary metrics cover all later rows remaining after the agreed exact
+  full-row deduplication. Report metrics separately for feature hashes absent
+  from earlier partitions.
+- Later data is never used to fit transformations or models.
+- Because attack families differ by day, this test combines temporal and
+  unseen-attack generalization; a performance gap cannot isolate time alone.
+- Attacks present during training and attacks absent from training will be
+  reported separately.
+
+### Leakage and final-test contract
+
+- Imputation, scaling, feature selection, and models are fitted on training data
+  only.
+- Validation data is used for model configuration and threshold selection.
+- All preprocessing, features, model settings, and the decision threshold are
+  frozen before the final test evaluation.
+- Final test results are not used to revise those decisions.
+
+### Threshold and metrics
+
+The decision threshold is selected on validation data. Candidate thresholds must
+first achieve `ATTACK recall >= 0.80`; among those candidates, the threshold with
+the highest `ATTACK` precision is selected.
+
+Primary reporting includes:
+
+- `ATTACK` precision, recall, and F1;
+- PR-AUC;
+- confusion matrix;
+- false-positive rate and absolute false-positive count;
+- results by day and original attack label.
+
+Accuracy will never be reported on its own.
+
+## Frozen model comparison
+
+1. `DummyClassifier` as a trivial reference.
+2. Logistic regression as an interpretable learned baseline.
+3. Random Forest.
+4. Histogram-based gradient boosting.
+
+No additional model was added before the required evaluation, documentation,
+and demo were complete.
+
+## Repository contents
+
+```text
+netguard-ai/
+├── .streamlit/
+│   └── config.toml
+├── MODEL_CARD.md
+├── LICENSE
+├── README.md
+├── VERSION
+├── app.py
+├── assets/
+│   └── screenshots/
+├── data/
+│   ├── README.md
+│   ├── checksums.json
+│   ├── processed/
+│   └── raw/
+├── reports/
+│   ├── data-profile.json
+│   ├── data-profile.md
+│   ├── data-quality-audit.json
+│   ├── data-quality-audit.md
+│   ├── feature-leakage-audit.json
+│   ├── ai-07-baseline-results.json
+│   ├── ai-07-baseline-results.md
+│   ├── ai-07-validation.json
+│   ├── ai-08-model-comparison-results.json
+│   ├── ai-08-model-comparison-results.md
+│   ├── ai-08-validation.json
+│   ├── ai-09-error-analysis.json
+│   ├── ai-09-error-analysis.md
+│   ├── ai-10-local-demo.md
+│   ├── ai-11-release.md
+│   ├── ai-15-individual-shap.json
+│   ├── ai-15-individual-shap.md
+│   ├── ai-25-clean-release-audit.md
+│   ├── demo-screenshots.md
+│   ├── final-report.md
+│   ├── split-design.md
+│   ├── split-summary.json
+│   └── split-summary.md
+├── release/
+│   ├── RELEASE_NOTES.md
+│   ├── release-files.txt
+│   └── release-manifest.json
+└── scripts/
+    ├── audit_dataset.py
+    ├── audit_feature_leakage.py
+    ├── analyze_errors.py
+    ├── build_model_matrix.py
+    ├── build_release.py
+    ├── build_splits.py
+    ├── explain_individual_predictions.py
+    ├── hash_dataset.py
+    ├── inference.py
+    ├── model_data.py
+    ├── preprocessing.py
+    ├── profile_dataset.py
+    ├── train_baselines.py
+    └── train_tree_models.py
+```
+
+Generated release bundles are written under ignored `dist/` and are not shown
+as committed source files.
+
+## Reproduce the current data checks
+
+The audit and split scripts use the Python standard library. AI-07 through AI-10
+additionally use the pinned packages in `requirements.txt`. All scripts have
+been verified locally with Python 3.14. Detailed download instructions are in
+[`data/README.md`](data/README.md).
+
+After placing the official archive and its extracted CSV files under `data/raw/`,
+regenerate the SHA-256 inventory:
+
+```powershell
+python scripts/hash_dataset.py data/raw/MachineLearningCSV.zip "data/raw/MachineLearningCSV/**/*.csv" --output data/checksums.json
+```
+
+Regenerate the schema and label profile:
+
+```powershell
+python scripts/profile_dataset.py "data/raw/MachineLearningCSV/**/*.csv" --output reports/data-profile.json
+```
+
+Audit exact repeated feature vectors and contradictory labels:
+
+```powershell
+python scripts/audit_feature_leakage.py "data/raw/MachineLearningCSV/**/*.csv" --output reports/feature-leakage-audit.json --groups-output reports/feature-leakage-groups.jsonl
+```
+
+The committed JSON contains totals and five examples per category. The complete
+JSONL is generated locally and ignored by Git because it can be large. Its
+one-based line numbers point to the original CSVs. The fingerprint excludes
+`Label` and the redundant second `Fwd Header Length` column; it compares the
+original feature-cell strings exactly, not numerically equivalent or similar
+flows. Different files are flagged, but this audit alone does not establish
+chronological order or whether a future split leaks data.
+The [leakage-audit interpretation](reports/feature-leakage-audit.md) records the
+evaluation policy for repeated vectors and conflicting labels.
+The [split design](reports/split-design.md) records the frozen temporal days,
+raw day-level counts, and the remaining reproducibility checks.
+
+Build the deduplicated row manifest and both split assignments:
+
+```powershell
+python scripts/build_splits.py "data/raw/MachineLearningCSV/**/*.csv" --manifest-output data/processed/split-manifest.csv --report-output reports/split-summary.json
+```
+
+The manifest is a generated local artifact and is ignored by Git. The committed
+[split summary](reports/split-summary.md) records its filename, size, SHA-256,
+actual partition counts, and overlap checks. Rebuilding from the verified raw
+files with the same code and seed must reproduce the same manifest hash.
+
+Create the local environment and materialize the compact model matrix:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe scripts/build_model_matrix.py
+```
+
+The official validation and final-test records are committed. To reproduce them
+without overwriting those records, write artifacts under the ignored processed
+directory:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/train_baselines.py validation --models-dir data/processed/reproduction/models --validation-output data/processed/reproduction/validation.json
+.\.venv\Scripts\python.exe scripts/train_baselines.py test --validation-output data/processed/reproduction/validation.json --test-output data/processed/reproduction/results.json
+```
+
+The [AI-07 baseline report](reports/ai-07-baseline-results.md) records the frozen
+thresholds, validation decisions, one-time final test, and limitations.
+
+Reproduce the AI-08 tree comparison into ignored local outputs:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/train_tree_models.py validation --models-dir data/processed/reproduction-ai08/models --validation-output data/processed/reproduction-ai08/validation.json
+.\.venv\Scripts\python.exe scripts/train_tree_models.py test --validation-output data/processed/reproduction-ai08/validation.json --test-output data/processed/reproduction-ai08/results.json
+```
+
+The [AI-08 comparison report](reports/ai-08-model-comparison-results.md) records
+the frozen model configurations, validation winners, final test results, and
+the observed temporal threshold instability.
+
+Reproduce the AI-09 descriptive analysis without modifying frozen models or
+thresholds:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/analyze_errors.py --output data/processed/reproduction-ai09.json
+```
+
+The [AI-09 error analysis](reports/ai-09-error-analysis.md) explains score
+shift, attack-family coverage, source-file errors, and validation-only
+permutation importance. Post-test findings are descriptive and cannot be used
+to revise the reported test result.
+
+Reproduce the AI-15 individual HGB explanations into an ignored output:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/explain_individual_predictions.py --output data/processed/reproduction-ai15.json
+```
+
+The [AI-15 SHAP report](reports/ai-15-individual-shap.md) explains three true
+positives, three false positives, and three false negatives selected
+deterministically across each category's score range. SHAP contributions are
+verified against the frozen model score and are not interpreted as causal.
+
+Run the AI-10 local explanatory demo after reproducing the ignored AI-07 and
+AI-08 model artifacts:
+
+```powershell
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+Open `http://localhost:8501`. The demo accepts prepared CSV rows using the 69
+frozen feature columns, verifies the selected artifact hash, applies its frozen
+threshold, and provides downloadable decisions. The
+[AI-10 demo report](reports/ai-10-local-demo.md) records the input contract,
+safety boundaries, verification, and limitations.
+
+## Demo evidence
+
+The [demo screenshot record](reports/demo-screenshots.md) documents the frozen
+model, recorded test evidence, local CSV scoring flow, and global validation
+context. These captures provide a visual complement to the automated tests and
+reproducible reports.
+
+![NetGuard AI local prediction results](assets/screenshots/03-prediction-results.png)
+
+## Reproduce release 0.2.0
+
+The [model card](MODEL_CARD.md) defines intended use, metrics, known failures,
+and ethical limitations. The [final report](reports/final-report.md) presents the
+complete experiment and conclusion. The machine-readable
+[release manifest](release/release-manifest.json) records every included source
+file plus the external dataset and model hashes.
+The [AI-11 release record](reports/ai-11-release.md) defines the publication
+boundary and verification criteria.
+
+After reproducing the ignored data and model artifacts, verify the committed
+release contract:
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests -q
+.\.venv\Scripts\python.exe scripts/build_release.py check --require-models
+```
+
+Rebuild the deterministic source ZIP and checksum file:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/build_release.py build --require-models
+```
+
+This creates `dist/netguard-ai-0.2.0-source.zip` and `dist/SHA256SUMS`. Raw data
+and model binaries are not placed in the ZIP. NetGuard AI's original code and
+documentation are distributed under the MIT License included in `LICENSE`.
+
+Any checksum mismatch must be investigated before the affected file is used.
+
+## What I learned
+
+The main thing I learned from this project is that a high score does not mean
+much if the evaluation setup is not trustworthy. The random split made the
+models look very strong, but the temporal split told a very different story.
+That made me focus less on chasing a better metric and more on leakage, dataset
+shift, threshold selection, and what the model was actually learning.
+
+The hardest part was not training the models. It was keeping the test set
+separate from the decisions. After I saw how badly the frozen threshold
+transferred to Friday, it would have been easy to adjust it and report a better
+result. I kept the original threshold because changing it at that point would
+have turned the test set into another validation set. Data preparation also took
+more care than I expected, especially handling duplicates, non-finite values,
+repeated feature vectors, and reproducible hashes.
+
+The final temporal result was not what I wanted, but it was still useful. It
+showed me that documenting a model's failure honestly can be more valuable than
+presenting a stronger number without understanding where it came from.
+
+## Roadmap
+
+- [x] Define the research question and experimental protocol.
+- [x] Download and verify the official dataset distribution.
+- [x] Record archive and per-file SHA-256 hashes.
+- [x] Profile schemas, row counts, and labels.
+- [x] Audit types, missing values, infinities, and duplicates.
+- [x] Audit pre-split feature leakage risks and record evaluation safeguards.
+- [x] Freeze and build random and temporal partitions; verify overlap controls.
+- [x] Build the preprocessing pipeline and learned baseline.
+- [x] Compare Random Forest and gradient boosting.
+- [x] Analyze errors, attack coverage, and feature importance.
+- [x] Explain individual correct and incorrect HGB decisions with SHAP.
+- [x] Build and test the local inference demo.
+- [x] Capture final demo, prediction, and validation evidence.
+- [x] Publish the final report, model card, and reproducible release.
+
+## Limitations and intended use
+
+NetGuard AI is a research and portfolio prototype, not a production intrusion
+detection system. CIC-IDS2017 was captured in a controlled environment in 2017,
+so performance on this dataset does not establish effectiveness on current,
+real-world networks or previously unseen attacks. The project will not capture
+live packets, block connections, or make operational security guarantees.
+
+## Dataset attribution
+
+Dataset: [CIC-IDS2017, Canadian Institute for Cybersecurity, University of New
+Brunswick](https://www.unb.ca/cic/datasets/ids-2017.html).
+
+Please cite the paper requested by the dataset publisher:
+
+> Iman Sharafaldin, Arash Habibi Lashkari, and Ali A. Ghorbani. "Toward
+> Generating a New Intrusion Detection Dataset and Intrusion Traffic
+> Characterization." ICISSP, 2018.
+
+The [official CIC dataset catalogue](https://www.unb.ca/cic/datasets/) permits
+redistribution, republication, and mirroring of its datasets provided that the
+dataset and required research-paper citation are included. CIC-IDS2017 is not
+included in this source repository and is not covered by any license selected
+for NetGuard AI's original code.
+
+## License
+
+NetGuard AI's original code and associated documentation are licensed under
+the [MIT License](LICENSE), copyright (c) 2026 Talania. CIC-IDS2017 is not part
+of the licensed work and remains subject to its publisher's terms and citation
+requirements described above.
